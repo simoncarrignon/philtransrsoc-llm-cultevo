@@ -65,11 +65,14 @@ def get_number_from_prompt(args):
     num=None
     while num is None:
         try:
+           print("api call:"+str(len(prompt)))
            resnum=chat_with_gpt(prompt)
            num=checkind(resnum,maxind)
-        except e:
+           print("done")
+        except Exception as e:
            print(e) 
            print("nonum") 
+           time.sleep(5)
            num=None
     return num 
 
