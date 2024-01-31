@@ -1,22 +1,31 @@
-alltraits=read.csv("finalres/allva.csv")
+
+exp="gpt4-january01/new.csv"
+alltraits=read.csv(exp)
 dim(alltraits)
 plot(alltraits[,2])
 alltraits[is.na(alltraits)]=0
-write.csv(file="corrected_final.csv",alltraits,row.names=F)
-alltraits2=read.csv("corrected.csv")
-total2=apply(alltraits2,2,sum)
-cnt2=table(total2)
-dis2=cnt2
-counts2=as.numeric(names(dis2))
-val2=as.numeric(dis2)
-plot(counts2,val2,log="xy")
-total=apply(alltraits,2,sum)
+plot(1,1,xlim=c(0,nrow(alltraits)),ylim=range(alltraits),type="n",xlab="time",ylab="count")
+
+for(l in 1:ncol(alltraits))lines(alltraits[,l],col=rainbow(ncol(alltraits))[l],lwd=2)
+
 cnt=table(total)
 dis=cnt
 counts=as.numeric(names(dis))
 val=as.numeric(dis)
 points(counts,val,col="red")
 
+
+#traits frequencies
+total=apply(alltraits,2,sum)
+cnt=table(total)
+dis=cnt
+counts=as.numeric(names(dis))
+val=as.numeric(dis)
+plot(counts,val,log="xy")
+total=apply(alltraits,2,sum)
+
+
+#Fitting power laws
 mln1=displ(total[total>0])
 mln1$setXmin(estimate_xmin(mln1))
 lines(mln,col="red")
