@@ -1,6 +1,6 @@
 
 #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
-#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
+#sk-i4K49E7qoOstj0jSeDXHT3BlbkFJJYi0XmdAqlW26Bxg24
 
 import openai
 import sys,os
@@ -20,6 +20,7 @@ print("done")
 
 def create_image_url(prompt):
     response = openai.Image.create(
+        model="dall-e-3",
         prompt=prompt,
         n=1,
         size="1024x1024"
@@ -53,7 +54,7 @@ def checkind(ind,maxind):
 
 def chat_with_gpt(prompt):
   response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-16k",
+    model="gpt-3.5-turbo-1106",
     messages=[
       {"role": "user", "content": prompt}
     ]
@@ -80,19 +81,24 @@ def get_number_from_prompt(args):
 def main():
     print("letsdoothis")
     mu=0.1
-    tstep=100
-    N=100
+    tstep=20
+    N=20
     isRandom=False
-    statments = [ " The world is the third planet from the sun in our solar system. It is the only known planet with life, and it has a diverse range of ecosystems and climates.",
-               "The world has a circumference of approximately 40,075 kilometers (24,901 miles) at the equator and a diameter of about 12,742 kilometers (7,918 miles).",
-               "The world has a total surface area of approximately 510.1 million square kilometers (196.9 million square miles), of which about 71% is covered by water and the remaining 29% is land.",
-               "The world's population is currently estimated to be over 7.9 billion people, spread across nearly 200 countries and territories.",
-               "The world is believed to be around 4.54 billion years old and has gone through numerous geological changes and events throughout its history, including volcanic eruptions, earthquakes, and ice ages." ]
-    pre="Between these statements, which one do you think is more susceptible to interest a human?"
+    statments=["Incorporating a rainbow of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
+    "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
+    "Hydration is a key component of a healthy lifestyle; drinking adequate water daily aids in digestion, nutrient absorption, and maintaining a balanced metabolism, which is essential for weight management.",
+    "Engaging in mindful eating practices, such as savoring each bite and listening to your body's hunger cues, can significantly improve your relationship with food and support a healthy, balanced lifestyle.",
+    "Incorporating moderate, regular physical activity alongside a diet rich in vegetables, fruits, and whole grains can dramatically improve your physical and mental health, leading to a more active and fulfilling life.",
+    "Limiting processed foods and sugars while prioritizing fresh, whole ingredients can lead to improved mental clarity, better sleep patterns, and an overall enhancement in life quality.",
+    "Understanding the nutritional content of your meals, including macronutrient ratios and calorie density, is crucial for making informed food choices that support a healthy and balanced diet.",
+    "Innovating in the kitchen by experimenting with international cuisines can introduce a variety of healthy and flavorful ingredients into your diet, making healthy eating a delightful experience.",
+    "Focusing on portion control is as important as food quality; eating in moderation ensures you get the necessary nutrients without excess calories, aiding in effective weight management.",
+    "Embracing a plant-based diet, rich in legumes, nuts, seeds, and whole grains, can provide substantial health benefits, including lowered risk of chronic diseases and improved digestion and metabolism."]
+    pre="Between these statements, which one do you think is most convincing?"
     preneut="Choose between these statements:"
     #post="Pick the statement you think is most interesting, modify it to make it even more interesting and write it back to me. Do not include anything else in your answer except your modified statement; never mention the fact that your are an AI, just write your modified statement" 
     post="In your answer do not include anything else that the index of the statement you pick. Do not explain your choice or include anything. Only the number and nothing else, no justification or any other words or letter that isn't a number"
-    modpostbias=" Modify this statement to make it more interesting. You can add or remove any information if you think this make it more attractive but your answer should stay short and never be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that your are an AI" 
+    modpostbias="Modify this statement to make it more convincing and effective to promote public health. You can add or remove any information if you think this make it more attractive but your answer should stay short and never be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that your are an AI" 
     modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that your are an AI" 
     suggest = {i: {'statement': statement, 'counter': round(N/len(statments))} for i, statement in enumerate(statments)}
 

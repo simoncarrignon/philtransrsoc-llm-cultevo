@@ -1,6 +1,6 @@
 import pickle
 
-allsteps=pickle.load(open("alltstep.pkl",'rb'))
+allsteps=pickle.load(open("alltstepbeta.pkl",'rb'))
 tsteps=len(allsteps)
 maxt=len(allsteps[tsteps-1])
 headers=["traits"+str(i) for i in range(maxt)]
