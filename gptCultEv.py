@@ -98,7 +98,7 @@ def get_number_from_prompt(args):
 def main():
     print("letsdoothis")
     isRandom=False
-    statments=["Incorporating a rainbow of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
+    statments=["Incorporating a variety of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
     "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
     "Hydration is a key component of a healthy lifestyle; drinking adequate water daily aids in digestion, nutrient absorption, and maintaining a balanced metabolism, which is essential for weight management.",
     "Engaging in mindful eating practices, such as savoring each bite and listening to your body's hunger cues, can significantly improve your relationship with food and support a healthy, balanced lifestyle.",
@@ -108,12 +108,16 @@ def main():
     "Innovating in the kitchen by experimenting with international cuisines can introduce a variety of healthy and flavorful ingredients into your diet, making healthy eating a delightful experience.",
     "Focusing on portion control is as important as food quality; eating in moderation ensures you get the necessary nutrients without excess calories, aiding in effective weight management.",
     "Embracing a plant-based diet, rich in legumes, nuts, seeds, and whole grains, can provide substantial health benefits, including lowered risk of chronic diseases and improved digestion and metabolism."]
-    pre="Between these statements, which one do you think is most convincing?"
+    pre="Between these statements, which one is most convincing?"
     preneut="Choose between these statements:"
     #post="Pick the statement you think is most interesting, modify it to make it even more interesting and write it back to me. Do not include anything else in your answer except your modified statement; never mention the fact that your are an AI, just write your modified statement" 
     post="In your answer do not include anything else that the index of the statement you pick. Do not explain your choice or include anything. Only the number and nothing else, no justification or any other words or letter that isn't a number"
-    modpostbias="Modify this statement to make it more convincing and effective to promote public health. You can add or remove any information if you think this make it more attractive but your answer should stay short and never be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that your are an AI" 
-    modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that your are an AI" 
+    modpostbiasOld="Modify this statement to make it more convincing and effective to promote public health. You should add information not present in the initialstamement. You may need to remove previous information to keep the statement short and never  more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
+    modpostbias="Create a totally new statement to promote public health.It should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
+    modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
+    #modpostAlberto="Please generate one variants based on this statement. You should add details that are not present in the original statement to make them more different, as long as they are related to the general topic. Here the statement: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\" "
+    modpostAlberto="Starting from this statement create a new one related to the same topic: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\""
+
     suggest = {i: {'statement': statement, 'counter': round(N/len(statments))} for i, statement in enumerate(statments)}
 
     allsel=list()
