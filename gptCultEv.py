@@ -189,14 +189,15 @@ def main():
                         print(e)
                         new=None
                         time.sleep(10)
-            if t % 5 == 0:
-                try: 
-                    print("createimage")
-                    url = create_image_url(suggest[max(suggest.keys())]['statement'])
-                    download_image(url, "output"+exptype+'_'+str(max(suggest.keys()))+".png")
-                    print("done")
-                except:
-                    print("notdone")
+            if printImage:
+                if t % 5 == 0:
+                    try: 
+                        print("createimage")
+                        url = create_image_url(suggest[max(suggest.keys())]['statement'])
+                        download_image(url, "output"+exptype+'_'+str(max(suggest.keys()))+".png")
+                        print("done")
+                    except:
+                        print("notdone")
             with open('variants'+exptype+'.pkl', 'wb') as outp:
                 pickle.dump(suggest, outp, pickle.HIGHEST_PROTOCOL)
             allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
