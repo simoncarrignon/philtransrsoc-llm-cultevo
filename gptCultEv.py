@@ -8,7 +8,24 @@ import random
 import pickle
 import time
 import requests
+import argparse
 
+parser = argparse.ArgumentParser(description='gpt evol app')
+parser.add_argument('--outdir', action="store", dest='outdir', default='.')
+parser.add_argument('-t', action="store", dest='tstep', default=10)
+parser.add_argument('-k', action="store", dest='K', default=20)
+parser.add_argument('-N', action="store", dest='N', default=10)
+parser.add_argument('-mu', action="store", dest='mu', default=0.1)
+parser.add_argument('--image', action="store", dest='image', default=False)
+args = parser.parse_args()
+outdir=args.outdir
+K=int(args.K)
+N=int(args.N)
+tstep=int(args.tstep)
+N=int(args.N)
+mu=float(args.mu)
+printImage = args.image
+print("Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir))
 
 from multiprocessing import Pool
 
@@ -80,9 +97,6 @@ def get_number_from_prompt(args):
 
 def main():
     print("letsdoothis")
-    mu=0.1
-    tstep=20
-    N=20
     isRandom=False
     statments=["Incorporating a rainbow of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
     "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
