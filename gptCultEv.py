@@ -3,7 +3,9 @@
 #sk-i4K49E7qoOstj0jSeDXHT3BlbkFJJYi0XmdAqlW26Bxg24
 #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
 
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="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")
 import sys,os
 import random
 import pickle
@@ -32,18 +34,15 @@ from multiprocessing import Pool
 
 # Set up the OpenAI API client
 print("get connection")
-openai.api_key = "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"
 print("done")
 
 
 def create_image_url(prompt):
-    response = openai.Image.create(
-        model="dall-e-3",
-        prompt=prompt,
-        n=1,
-        size="1024x1024"
-    )
-    image_url = response['data'][0]['url']
+    response = client.images.generate(model="dall-e-3",
+    prompt=prompt,
+    n=1,
+    size="1024x1024")
+    image_url = response.data[0].url
     return image_url
 
 def download_image(url, filename):
@@ -71,12 +70,10 @@ def checkind(ind,maxind):
         return None
 
 def chat_with_gpt(prompt):
-  response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-1106",
-    messages=[
-      {"role": "user", "content": prompt}
-    ]
-  )
+  response = client.chat.completions.create(model="gpt-3.5-turbo-1106",
+  messages=[
+    {"role": "user", "content": prompt}
+  ])
   answer = response.choices[0].message.content
   return answer
 
