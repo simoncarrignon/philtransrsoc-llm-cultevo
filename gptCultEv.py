@@ -1,6 +1,7 @@
 
 #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
 #sk-i4K49E7qoOstj0jSeDXHT3BlbkFJJYi0XmdAqlW26Bxg24
+#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
 
 import openai
 import sys,os
@@ -31,7 +32,7 @@ from multiprocessing import Pool
 
 # Set up the OpenAI API client
 print("get connection")
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = "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"
 print("done")
 
 
@@ -117,13 +118,13 @@ def main():
     modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
     #modpostAlberto="Please generate one variants based on this statement. You should add details that are not present in the original statement to make them more different, as long as they are related to the general topic. Here the statement: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\" "
     modpostAlberto="Starting from this statement create a new one related to the same topic: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\""
-
+    modpostbias=modpostAlberto
     suggest = {i: {'statement': statement, 'counter': round(N/len(statments))} for i, statement in enumerate(statments)}
 
     allsel=list()
     exptype="beta"
     allsuggests=list()
-    with Pool(processes=100) as pool:
+    with Pool(processes=20) as pool:
         for t in range(0,tstep):
             print(str(t)+" =============="+"\n")
             if t == 0:
