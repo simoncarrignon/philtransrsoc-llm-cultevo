@@ -1,11 +1,19 @@
 
 #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
 #sk-i4K49E7qoOstj0jSeDXHT3BlbkFJJYi0XmdAqlW26Bxg24
+#perso
 #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
+#colab:
+#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
 
 from openai import OpenAI
+from multiprocessing import Pool
 
-client = OpenAI(api_key="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")
+# Set up the OpenAI API client
+print("get connection")
+client = OpenAI(api_key="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")
+print("done")
+
 import sys,os
 import random
 import pickle
