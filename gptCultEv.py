@@ -123,17 +123,24 @@ def main():
     allsel=list()
     exptype="beta"
     allsuggests=list()
-    with Pool(processes=10) as pool:
+    with Pool(processes=100) as pool:
         for t in range(0,tstep):
             print(str(t)+" =============="+"\n")
+            if t == 0:
+                selind = range(len(suggest))
+            else:
+                weights = [suggest[i]['counter'] for i in suggest.keys()]
+                print(sum(weights))
+                selind = random.choices(range(len(suggest)),weights=weights,k=K)
+                print(selind)
             if exptype == "beta":
                 prompt=pre
             else:
                 prompt=preneut
-            for s in suggest.keys():
+            for s in selind:
                 if(suggest[s]['counter']>0):prompt=prompt+"\n"+str(s)+" : "+suggest[s]["statement"]
             prompt=prompt+"\n"+post
-            #print(prompt)
+            print(prompt)
             #results = pool.map(chat_with_gpt, [prompt]*N)
             if isRandom:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
@@ -165,13 +172,16 @@ def main():
                             modpost=modpostbias
                         else:
                             modpost=modpostneut
-                        new = chat_with_gpt(suggest[ns]["statement"]+"\n"+modpost)
+                        #modify:
+                        #new = chat_with_gpt(suggest[ns]["statement"]+"\n"+modpost)
+                        new = chat_with_gpt(modpost)
                         #new="new prompt"+str(max(suggest.keys()) + 1)
                         # Now you can call the function with a prompt
                         print(new)
                         #suggest.append(new)
                         new_key = max(suggest.keys()) + 1
                         suggest[new_key] = {'statement': new, 'counter': 1}
+                        suggest[ns]['counter'] -= 1
                     except Exception as e:
                         print("no news yet: "+str(ns))
                         print(str(selind))
