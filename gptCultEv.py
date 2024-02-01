@@ -24,10 +24,13 @@ import argparse
 parser = argparse.ArgumentParser(description='gpt evol app')
 parser.add_argument('--outdir', action="store", dest='outdir', default='.')
 parser.add_argument('--statements', action="store", dest='stfile', default="")
+parser.add_argument('--modprompt', action="store", dest='modfile', default="")
+parser.add_argument('--selprompt', action="store", dest='selfile', default="")
 parser.add_argument('-t', action="store", dest='tstep', default=10)
 parser.add_argument('-k', action="store", dest='K', default=20)
 parser.add_argument('-N', action="store", dest='N', default=10)
 parser.add_argument('-mu', action="store", dest='mu', default=0.1)
+parser.add_argument('--mutate', action="store", dest='mutate', default=False)
 parser.add_argument('--image', action="store", dest='image', default=False)
 args = parser.parse_args()
 outdir=args.outdir
@@ -37,14 +40,20 @@ tstep=int(args.tstep)
 N=int(args.N)
 mu=float(args.mu)
 printImage = args.image
+mutate = args.mutate
 stfile = args.stfile
-print("Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir)+" with statements from:"+stfile)
+modfile = args.modfile
+selfile = args.selfile
 
-from multiprocessing import Pool
+exp="Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir)+" with statements from:"+stfile+" selection following "+selfile
+if mutate:
+    exp=exp+" transformation following "+modfile
+else :
+    exp=exp+" new statements following "+modfile
 
-# Set up the OpenAI API client
-print("get connection")
-print("done")
+print(exp)
+
+
 
 
 def create_image_url(prompt):
@@ -86,6 +95,10 @@ def chat_with_gpt(prompt):
   ])
   answer = response.choices[0].message.content
   return answer
+def read_from_file(fname):
+    with open(fname, 'r') as file:
+        lines = [line.strip() for line in file if line.strip()]
+    return lines
 
 def get_number_from_prompt(args):
     prompt, maxind = args
@@ -95,7 +108,7 @@ def get_number_from_prompt(args):
            #print("api call:"+str(len(prompt)))
            resnum=chat_with_gpt(prompt)
            num=checkind(resnum,maxind)
-           #print("done")
+           print("done api call of "+str(len(prompt))+" characters")
         except Exception as e:
            print(e) 
            print("nonum") 
@@ -103,9 +116,7 @@ def get_number_from_prompt(args):
            num=None
     return num 
 
-def main():
-    print("letsdoothis")
-    isRandom=False
+def get_statements(stfile):
     if stfile == "":
         statements=["Incorporating a variety of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
                     "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
@@ -118,20 +129,34 @@ def main():
                     "Focusing on portion control is as important as food quality; eating in moderation ensures you get the necessary nutrients without excess calories, aiding in effective weight management.",
                     "Embracing a plant-based diet, rich in legumes, nuts, seeds, and whole grains, can provide substantial health benefits, including lowered risk of chronic diseases and improved digestion and metabolism."]
     else:
-        with open(stfile, 'r') as file:
-            # Read all lines and store them in a list
-            statements = file.readlines()
+        statements=read_from_file(stfile)
+    return(statements)
 
-    pre="Between these statements, which one is most convincing?"
-    preneut="Choose between these statements:"
-    #post="Pick the statement you think is most interesting, modify it to make it even more interesting and write it back to me. Do not include anything else in your answer except your modified statement; never mention the fact that your are an AI, just write your modified statement" 
+def get_select(selfile):
+    if stfile == "":
+        sel="Choose between these statements:"
+    else:
+        sel=read_from_file(selfile)[0]
+    return sel 
+
+def get_modifier(modfile):
+    if modfile == "":
+        mod="modify the statement"
+    else:
+        mod=read_from_file(modfile)[0]
+    return mod
+
+
+def main():
+    print("run experiment")
+    isRandom=False
+    statements=get_statements(stfile)
+    pre=get_select(selfile)
+    print(pre)
+    modifier=get_modifier(modfile)
+
     post="In your answer do not include anything else that the index of the statement you pick. Do not explain your choice or include anything. Only the number and nothing else, no justification or any other words or letter that isn't a number"
-    modpostbiasOld="Modify this statement to make it more convincing and effective to promote public health. You should add information not present in the initialstamement. You may need to remove previous information to keep the statement short and never  more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
-    modpostbias="Create a totally new statement to promote public health.It should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
-    modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
-    #modpostAlberto="Please generate one variants based on this statement. You should add details that are not present in the original statement to make them more different, as long as they are related to the general topic. Here the statement: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\" "
-    modpostAlberto="Create a statement related to the topic of the stament below but as different as possible: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\""
-    modpostbias=modpostAlberto
+    modpostbias=modifier
     suggest = {i: {'statement': statement, 'counter': round(N/len(statements))} for i, statement in enumerate(statements)}
 
     allsel=list()
@@ -145,7 +170,7 @@ def main():
                 selind = range(len(suggest))
             else:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
-                print(sum(weights))
+                print("total number of vote:"+str(sum(weights)))
                 selind = random.choices(range(len(suggest)),weights=weights,k=K)
                 print("in the "+str(K)+" slots we retain:")
                 print(selind)
@@ -171,7 +196,7 @@ def main():
                     suggest[index]['counter'] += 1
                 except:
                     print(index)
-            print(len(selind))
+            #print(len(selind))
             #print(results)
             #selind = list(map(lambda x: checkind(x, len(results)), results))
             #print(selind)
@@ -179,6 +204,7 @@ def main():
             #sel=random.sample(range(len(selind)),int(ninov))
             weights = [suggest[i]['counter'] for i in suggest.keys()]
             sel = random.choices(list(suggest.keys()), weights=weights, k=int(ninov))
+            print("generating "+str(len(sel))+" new statements: ")
             for ns in sel:
                 new=None
                 while new is None:
@@ -189,7 +215,9 @@ def main():
                         else:
                             modpost=modpostneut
                         #modify:
-                        #new = chat_with_gpt(suggest[ns]["statement"]+"\n"+modpost)
+                        if mutate:
+                            modpost=suggest[ns]["statement"]+"\n"+modpost
+                        #new = chat_with_gpt()
                         new = chat_with_gpt(modpost)
                         #new="new prompt"+str(max(suggest.keys()) + 1)
                         # Now you can call the function with a prompt
