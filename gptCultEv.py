@@ -15,6 +15,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='gpt evol app')
 parser.add_argument('--outdir', action="store", dest='outdir', default='.')
+parser.add_argument('--statements', action="store", dest='stfile', default="")
 parser.add_argument('-t', action="store", dest='tstep', default=10)
 parser.add_argument('-k', action="store", dest='K', default=20)
 parser.add_argument('-N', action="store", dest='N', default=10)
@@ -28,7 +29,8 @@ tstep=int(args.tstep)
 N=int(args.N)
 mu=float(args.mu)
 printImage = args.image
-print("Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir))
+stfile = args.stfile
+print("Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir)+" with statements from:"+stfile)
 
 from multiprocessing import Pool
 
@@ -82,10 +84,10 @@ def get_number_from_prompt(args):
     num=None
     while num is None:
         try:
-           print("api call:"+str(len(prompt)))
+           #print("api call:"+str(len(prompt)))
            resnum=chat_with_gpt(prompt)
            num=checkind(resnum,maxind)
-           print("done")
+           #print("done")
         except Exception as e:
            print(e) 
            print("nonum") 
@@ -96,16 +98,22 @@ def get_number_from_prompt(args):
 def main():
     print("letsdoothis")
     isRandom=False
-    statments=["Incorporating a variety of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
-    "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
-    "Hydration is a key component of a healthy lifestyle; drinking adequate water daily aids in digestion, nutrient absorption, and maintaining a balanced metabolism, which is essential for weight management.",
-    "Engaging in mindful eating practices, such as savoring each bite and listening to your body's hunger cues, can significantly improve your relationship with food and support a healthy, balanced lifestyle.",
-    "Incorporating moderate, regular physical activity alongside a diet rich in vegetables, fruits, and whole grains can dramatically improve your physical and mental health, leading to a more active and fulfilling life.",
-    "Limiting processed foods and sugars while prioritizing fresh, whole ingredients can lead to improved mental clarity, better sleep patterns, and an overall enhancement in life quality.",
-    "Understanding the nutritional content of your meals, including macronutrient ratios and calorie density, is crucial for making informed food choices that support a healthy and balanced diet.",
-    "Innovating in the kitchen by experimenting with international cuisines can introduce a variety of healthy and flavorful ingredients into your diet, making healthy eating a delightful experience.",
-    "Focusing on portion control is as important as food quality; eating in moderation ensures you get the necessary nutrients without excess calories, aiding in effective weight management.",
-    "Embracing a plant-based diet, rich in legumes, nuts, seeds, and whole grains, can provide substantial health benefits, including lowered risk of chronic diseases and improved digestion and metabolism."]
+    if stfile == "":
+        statements=["Incorporating a variety of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you.",
+                    "Regular consumption of whole grains, lean proteins, and healthy fats forms the cornerstone of a nutritionally sound diet, playing a pivotal role in heart health and long-term disease prevention.",
+                    "Hydration is a key component of a healthy lifestyle; drinking adequate water daily aids in digestion, nutrient absorption, and maintaining a balanced metabolism, which is essential for weight management.",
+                    "Engaging in mindful eating practices, such as savoring each bite and listening to your body's hunger cues, can significantly improve your relationship with food and support a healthy, balanced lifestyle.",
+                    "Incorporating moderate, regular physical activity alongside a diet rich in vegetables, fruits, and whole grains can dramatically improve your physical and mental health, leading to a more active and fulfilling life.",
+                    "Limiting processed foods and sugars while prioritizing fresh, whole ingredients can lead to improved mental clarity, better sleep patterns, and an overall enhancement in life quality.",
+                    "Understanding the nutritional content of your meals, including macronutrient ratios and calorie density, is crucial for making informed food choices that support a healthy and balanced diet.",
+                    "Innovating in the kitchen by experimenting with international cuisines can introduce a variety of healthy and flavorful ingredients into your diet, making healthy eating a delightful experience.",
+                    "Focusing on portion control is as important as food quality; eating in moderation ensures you get the necessary nutrients without excess calories, aiding in effective weight management.",
+                    "Embracing a plant-based diet, rich in legumes, nuts, seeds, and whole grains, can provide substantial health benefits, including lowered risk of chronic diseases and improved digestion and metabolism."]
+    else:
+        with open(stfile, 'r') as file:
+            # Read all lines and store them in a list
+            statements = file.readlines()
+
     pre="Between these statements, which one is most convincing?"
     preneut="Choose between these statements:"
     #post="Pick the statement you think is most interesting, modify it to make it even more interesting and write it back to me. Do not include anything else in your answer except your modified statement; never mention the fact that your are an AI, just write your modified statement" 
@@ -114,22 +122,24 @@ def main():
     modpostbias="Create a totally new statement to promote public health.It should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
     modpostneut="modify this statement. Your answer should not be more than 200 letters. Do not include anything else than your modified statement; never mention the fact that you are an AI" 
     #modpostAlberto="Please generate one variants based on this statement. You should add details that are not present in the original statement to make them more different, as long as they are related to the general topic. Here the statement: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\" "
-    modpostAlberto="Starting from this statement create a new one related to the same topic: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\""
+    modpostAlberto="Create a statement related to the topic of the stament below but as different as possible: \"Eating a healthy, balanced diet is an important part of maintaining good health, and can help you feel your best. This means eating a wide variety of foods in the right proportions, and consuming the right amount of food and drink to achieve and maintain a healthy body weight.\""
     modpostbias=modpostAlberto
-    suggest = {i: {'statement': statement, 'counter': round(N/len(statments))} for i, statement in enumerate(statments)}
+    suggest = {i: {'statement': statement, 'counter': round(N/len(statements))} for i, statement in enumerate(statements)}
 
     allsel=list()
     exptype="beta"
     allsuggests=list()
+    allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
     with Pool(processes=20) as pool:
         for t in range(0,tstep):
-            print(str(t)+" =============="+"\n")
+            print("timestep: "+str(t)+" =============="+"\n")
             if t == 0:
                 selind = range(len(suggest))
             else:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
                 print(sum(weights))
                 selind = random.choices(range(len(suggest)),weights=weights,k=K)
+                print("in the "+str(K)+" slots we retain:")
                 print(selind)
             if exptype == "beta":
                 prompt=pre
