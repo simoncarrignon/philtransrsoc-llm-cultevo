@@ -46,6 +46,7 @@ stfile = args.stfile
 modfile = args.modfile
 selfile = args.selfile
 checkmod = args.checkmod
+mutation="slots"
 
 if not os.path.exists(outdir):
         os.makedirs(outdir)
@@ -168,32 +169,41 @@ def main():
     exptype="beta"
     allsuggests=list()
     allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
+    newstatements=[]
     with Pool(processes=20) as pool:
         for t in range(0,tstep):
             print("timestep: "+str(t)+" =============="+"\n")
+            selslots=[] #slots retained
             if t == 0:
-                selind = range(len(suggest))
+                selslots = range(len(suggest))
             else:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
                 print("total number of vote:"+str(sum(weights)))
-                selind = random.choices(range(len(suggest)),weights=weights,k=K)
+                ki=K
+                if mutation == "slots":
+                    ki=K-len(newstatements)
+                selslots = random.choices(range(len(suggest)),weights=weights,k=ki)
+                if mutation == "slots":
+                    selslots=selslots+newstatements
                 print("in the "+str(K)+" slots we retain:")
-                print(selind)
+                print(selslots)
             if exptype == "beta":
                 prompt=pre
             else:
                 prompt=preneut
-            for s in selind:
+            for s in selslots:
                 if(suggest[s]['counter']>0):prompt=prompt+"\n"+str(s)+" : "+suggest[s]["statement"]
             prompt=prompt+"\n"+post
             print(prompt)
             #results = pool.map(chat_with_gpt, [prompt]*N)
+            selind=[] #individual selection 
             if isRandom:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
                 selind = random.choices(range(len(suggest)),weights=weights,k=N)
             else: 
                 selind = pool.map(get_number_from_prompt, [(prompt,len(suggest.keys()))]*N)
             allsel.append(selind)
+            #reset counters
             for s in suggest.keys():
                 suggest[s]['counter']=0
             for index in selind:
@@ -205,11 +215,18 @@ def main():
             #print(results)
             #selind = list(map(lambda x: checkind(x, len(results)), results))
             #print(selind)
-            ninov=max(N*mu,1)
-            #sel=random.sample(range(len(selind)),int(ninov))
-            weights = [suggest[i]['counter'] for i in suggest.keys()]
-            sel = random.choices(list(suggest.keys()), weights=weights, k=int(ninov))
-            print("generating "+str(len(sel))+" new statements: ")
+            if mutation == "individal":
+                ninov=max(N*mu,1)
+                #sel=random.sample(range(len(selind)),int(ninov))
+                weights = [suggest[i]['counter'] for i in suggest.keys()]
+                sel = random.choices(list(suggest.keys()), weights=weights, k=int(ninov))
+                print("generating "+str(len(sel))+" new statements at individual level:")
+            if mutation == "slots":
+                ninov=max(K*mu,1)
+                #sel=random.sample(range(len(selind)),int(ninov))
+                sel = random.sample(selslots, k=int(ninov))
+                print("generating "+str(len(sel))+" new statements at individual level:")
+            newstatements=[]
             for ns in sel:
                 new=None
                 while new is None:
@@ -230,8 +247,8 @@ def main():
                         # Now you can call the function with a prompt
                         #suggest.append(new)
                         new_key = max(suggest.keys()) + 1
+                        newstatements.append(new_key)
                         suggest[new_key] = {'statement': new, 'counter': 1}
-                        suggest[ns]['counter'] -= 1
                         print("new> "+str(new_key)+":"+new)
                     except Exception as e:
                         print("no news yet: "+str(ns))
@@ -241,7 +258,7 @@ def main():
                         new=None
                         time.sleep(10)
             if printImage:
-                if t % (N*mu*tstep+10)/5 == 0:
+                if t % (K*mu*tstep+10)/5 == 0:
                     try: 
                         print("createimage")
                         url = create_image_url(suggest[max(suggest.keys())]['statement'])
