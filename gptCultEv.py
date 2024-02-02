@@ -11,7 +11,7 @@ from multiprocessing import Pool
 
 # Set up the OpenAI API client
 print("get connection")
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 print("done")
 
 import sys,os
@@ -32,6 +32,7 @@ parser.add_argument('-N', action="store", dest='N', default=10)
 parser.add_argument('-mu', action="store", dest='mu', default=0.1)
 parser.add_argument('--mutate', action="store", dest='mutate', default=False)
 parser.add_argument('--image', action="store", dest='image', default=False)
+parser.add_argument('--checkmod', action="store", dest='checkmod', default=False)
 args = parser.parse_args()
 outdir=args.outdir
 K=int(args.K)
@@ -44,6 +45,10 @@ mutate = args.mutate
 stfile = args.stfile
 modfile = args.modfile
 selfile = args.selfile
+checkmod = args.checkmod
+
+if not os.path.exists(outdir):
+        os.makedirs(outdir)
 
 exp="Starting experiment with "+str(N)+" agents, "+str(K)+" slots"+ " to be stored in "+str(outdir)+" with statements from:"+stfile+" selection following "+selfile
 if mutate:
@@ -218,14 +223,16 @@ def main():
                         if mutate:
                             modpost=suggest[ns]["statement"]+"\n"+modpost
                         #new = chat_with_gpt()
+                        if checkmod :
+                            print(modpost)
                         new = chat_with_gpt(modpost)
                         #new="new prompt"+str(max(suggest.keys()) + 1)
                         # Now you can call the function with a prompt
-                        print(new)
                         #suggest.append(new)
                         new_key = max(suggest.keys()) + 1
                         suggest[new_key] = {'statement': new, 'counter': 1}
                         suggest[ns]['counter'] -= 1
+                        print("new> "+str(new_key)+":"+new)
                     except Exception as e:
                         print("no news yet: "+str(ns))
                         print(str(selind))
@@ -234,20 +241,20 @@ def main():
                         new=None
                         time.sleep(10)
             if printImage:
-                if t % 5 == 0:
+                if t % (N*mu*tstep+10)/5 == 0:
                     try: 
                         print("createimage")
                         url = create_image_url(suggest[max(suggest.keys())]['statement'])
-                        download_image(url, "output"+exptype+'_'+str(max(suggest.keys()))+".png")
+                        download_image(url, os.path.join(outdir,"output"+exptype+'_'+str(max(suggest.keys()))+".png"))
                         print("done")
                     except:
                         print("notdone")
-            with open('variants'+exptype+'.pkl', 'wb') as outp:
+            with open(os.path.join(outdir,'variants'+exptype+'.pkl'), 'wb') as outp:
                 pickle.dump(suggest, outp, pickle.HIGHEST_PROTOCOL)
             allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
-            with open('alltstep'+exptype+'.pkl', 'wb') as tstp:
+            with open(os.path.join(outdir,'alltstep'+exptype+'.pkl'), 'wb') as tstp:
                 pickle.dump(allsuggests, tstp, pickle.HIGHEST_PROTOCOL)
-            print(allsuggests)
+            #print(allsuggests)
 
     
 
