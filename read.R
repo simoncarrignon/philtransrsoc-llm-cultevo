@@ -1,5 +1,5 @@
 
-exp="gpt4-january01/new.csv"
+exp="exp.csv"
 alltraits=read.csv(exp)
 dim(alltraits)
 plot(alltraits[,2])
