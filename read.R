@@ -21,7 +21,7 @@ cnt=table(total)
 dis=cnt
 counts=as.numeric(names(dis))
 val=as.numeric(dis)
-plot(counts,val,log="xy")
+plot(counts,val,log="xy",col="red",pch=20)
 total=apply(alltraits,2,sum)
 
 
@@ -37,3 +37,5 @@ plot(mln2,pch=21,bg="red",xlim=range(pts1$x,pts2$x),ylim=range(pts1$y,pts2$y),xl
 lines(mln2,col="red")
 points(pts1$x,pts1$y,pch=21,bg="green")
 lines(mln1,col="green")
+
+
