@@ -95,7 +95,7 @@ def checkind(ind,maxind):
         return None
 
 def chat_with_gpt(prompt):
-  response = client.chat.completions.create(model="gpt-3.5-turbo-1106",
+  response = client.chat.completions.create(model="gpt-4.5-turbo-1106",
   messages=[
     {"role": "user", "content": prompt}
   ])
@@ -258,7 +258,8 @@ def main():
                         new=None
                         time.sleep(10)
             if printImage:
-                if t % (K*mu*tstep+10)/5 == 0:
+                if t % int(tstep/5) == 0:
+                #if t % int((K*mu*tstep+10)/5) == 0:
                     try: 
                         print("createimage")
                         url = create_image_url(suggest[max(suggest.keys())]['statement'])
