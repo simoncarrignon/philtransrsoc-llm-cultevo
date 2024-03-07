@@ -1,4 +1,17 @@
-# Chani transmission with Chat GPT
+# Chain transmission with Chat GPT
+
+
+## Install on Debian with venv
+
+```bash
+sudo apt install python3.10-venv
+python3 -m venv . #activate environment in the local repo
+./bin/pip3 install openai  #install openai
+./bin/pip3 install requests
+```
+
+
+
 
 
 For the python version:
