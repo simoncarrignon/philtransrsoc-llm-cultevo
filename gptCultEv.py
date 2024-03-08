@@ -95,7 +95,7 @@ def checkind(ind,maxind):
         return None
 
 def chat_with_gpt(prompt):
-  response = client.chat.completions.create(model="gpt-4.5-turbo-1106",
+  response = client.chat.completions.create(model="gpt-3.5-turbo",
   messages=[
     {"role": "user", "content": prompt}
   ])
