@@ -1,8 +1,3 @@
-
-#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
-#sk-i4K49E7qoOstj0jSeDXHT3BlbkFJJYi0XmdAqlW26Bxg24
-#perso
-#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
 #colab:
 #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
 
@@ -11,7 +6,7 @@ from multiprocessing import Pool
 
 # Set up the OpenAI API client
 print("get connection")
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 print("done")
 
 import sys,os
@@ -194,7 +189,7 @@ def main():
             for s in selslots:
                 if(suggest[s]['counter']>0):prompt=prompt+"\n"+str(s)+" : "+suggest[s]["statement"]
             prompt=prompt+"\n"+post
-            print(prompt)
+            #print(prompt)
             #results = pool.map(chat_with_gpt, [prompt]*N)
             selind=[] #individual selection 
             if isRandom:
