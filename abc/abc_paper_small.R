@@ -1,6 +1,7 @@
 expdir <- "test"
 
 source("R/model-core.R")
+source("R/abcrfa.R")
 source("R/metrics.R")
 tmpdir <- expdir
 n=0
@@ -23,7 +24,7 @@ ns=5000
 Js=runif(ns,0,1.5) 
 betas=runif(ns,0,1.5) 
 
-allexp <- read.csv("../data/GPT3.5_gennew_concatenated_files.csv")
+allexp <- read.csv("../data/GPT3.5_mut_concatenated_files.csv")
 
 expnames <- expand.grid(Mutation=unique(allexp$Mutation),Selection=unique(allexp$Selection),stringsAsFactors=F)
 exnames <- apply(expnames,1,function(e)paste0(e,collapse="_"))
@@ -35,25 +36,22 @@ allexp <- lapply(1:nrow(expnames),function(e){
    return(subex)
 })
 names(allexp) <- exnames
+allexp <- allexp[lengths(allexp)>0]
 
 expnames <- expnames[apply(expnames,1,function(e)paste0(e,collapse="_")) %in% names(allexp),]
 
-expnames <- expnames[apply(expnames,1,function(e)paste0(e,collapse="_"))
 
 metrics <- c(d.sim, d.gap , d.turn, d.min,d.max,d.mean,d.median, d.unique)
-names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median"," d.unique")
-names(metrics) <- 
-metrics=metrics[c(1,2,3,5)]
+names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median","d.unique")
+metrics  <-  metrics[-c(5:8)]
 
 #===== ABC for all strategies (including original model, unbiased and all the others
 library(parallel)
-allinferedmodes=c()
 for(strat in strats){#,paste0("s4g11",c("a","b","c")))){
+   strat="llmsmut"
     cat(paste0("Running ABCRFA inference for: \n ",strat," strategy, using ",length(metrics)," metrics (",paste0(names(metrics),collapse=","),") ========\n"))
-   data.currentstrat =  lapply(AllSubsampled,function(i)strat_exec(strat=strat,data=i))
     allmetricsallex <- lapply(allexp,function(exp)lapply(metrics,function(f)f(exp)))
     
-   strat="llms"
     cl <- makeCluster(20,"FORK",outfile=file.path("test",paste0(gsub(" ","_",tolower(strat)), "_log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log")))
     alldismulti <- parLapply(cl,1:ns,function(i) {
         tryCatch(
@@ -111,16 +109,7 @@ for(strat in strats){#,paste0("s4g11",c("a","b","c")))){
     })
     names(alladjustment)=names(cleaned)
     allmodes=lapply(alladjustment,function(adj){ apply(adj$adj.values,2,function(i)hdrcde::hdr(i)$mode) })
-    
-   allinferedmodes=rbind(allinferedmodes,allmodes)
-    },error=function(e){print(e);return(NULL)})
 }
-
-plot(1,1,ylim=c(0,2),xlim=c(0,2))
-lapply(alladjustment,function(i)points(i[[1]]))
-print(apply(allinferedmodes,2,unlist))
-
-saveRDS(file=file.path(expdir,"allmodes.RDS"),allinferedmodes)
 
 cols=palette.colors(n=length(unique(expnames$Mutation)),palette="Set 2")
 names(cols)=unique(expnames$Mutation)
@@ -128,7 +117,6 @@ pchs=20+1:length(unique(expnames$Selection))
 names(pchs)=unique(expnames$Selection)
 
 plot(1,1,ylim=c(0,2),xlim=c(0,2))
-lapply(alladjustment,function(i)points(i[[1]]))
 for(e in 1:nrow(expnames)){
     en <- paste0(expnames[e,],collapse="_")
     try({
