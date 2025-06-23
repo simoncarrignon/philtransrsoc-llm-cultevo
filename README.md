@@ -2,7 +2,43 @@
 
 This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
-## Content:
+# Project Overview
+
+project contains several scripts, prompts, and results related to language model exploration using Cultural Evolution model. Below is a structured overview of the directory contents, designed to help you navigate the repository efficiently.
+
+### Directory Structure
+
+- 📁 **Root Directory:**
+  - 📄 `lastautoExplor.sh`: A shell script likely used for automation or exploration tasks.
+  - 📄 `lis`: A list file, potentially containing itemized data or configurations.
+  - 📄 `README.md`: The file you are currently reading.
+  - 📜 `read.R`: An R script for data processing or analysis.
+  - 🗃️ `results.csv`: A CSV file containing consolidated results or data outputs.
+
+- 📁 **chain-llms/**:
+  - 📄 `Dockerfile`: Configuration for setting up the Docker environment.
+  - 📄 `get_top_ten.py`: A Python script to extract top ten statement from an experiment
+  - 📄 `get_top_two_time.py`: cf above
+  - 📄 `gptCultEv.py`: core script to generate a chain experiment, described below
+  - 📓 `GPTEVOL.ipynb`: Jupyter Notebook to interactively play with LLMs and reproduce the expeirment
+  - 📃 `requirements.txt`: A listing of Python dependencies necessary for the project.
+
+  - 📁 **prompts/**:
+    - Contains prompt files used to drive the experiment
+      - 📜 `generatenew_attractive_health.prompt`
+      - 📜 `generate_new_convincing.prompt`
+      - 📜 `generatenew_efficient_health.prompt`
+      - 📜 `generatenew_original_health.prompt`
+      - 📜 `generatenew_random_health.prompt`
+      - 📜 `modify_previous_for_more_attractive.prompt`
+      - 📜 `modify_previous_for_more_efficient.prompt`
+      - 📜 `modify_previous_for_more_original.prompt`
+      - 📜 `modify_previous_for_more_random.prompt`
+      - 📜 `modify_previous_random.prompt`
+      - 📜 `select_attractive.prompt`
+      - 📜 `select_efficient.prompt`
+      - 📜 `select_original.prompt`
+      - 📜 `select_random.prompt`
 
 
 ## Chain transmission with Chat GPT
