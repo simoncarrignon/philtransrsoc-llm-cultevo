@@ -1,15 +1,12 @@
-#colab:
-#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
-
 from openai import OpenAI
 from multiprocessing import Pool
+import sys,os
 
 # Set up the OpenAI API client
 print("get connection")
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 print("done")
 
-import sys,os
 import random
 import pickle
 import time
