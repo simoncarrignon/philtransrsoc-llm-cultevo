@@ -5,6 +5,10 @@ d.gap <- function(freqarray)apply(apply(relfreq(freqarray),2,range),2,function(i
 d.turn <- function(freqarray)getTurnover(freqarray,10)
 d.spec <- function(freqarray)GeneCycle::periodogram(d.sim(freqarray))$spec[,1]
 d.unique <- function(freqarray)apply(freqarray,2,function(i)sum(i>0))
+d.mean <- function(freqarray)apply(freqarray,2,mean)
+d.median <- function(freqarray)apply(freqarray,2,median)
+d.max <- function(freqarray)apply(freqarray,2,max)
+d.min <- function(freqarray)apply(freqarray,2,min)
 d.gini <- function(freqarray)apply(freqarray,2,gini)
 d.lognormmean <- function(freqarray)apply(freqarray,2,lognormmean)
 d.lognormsd <- function(freqarray)apply(freqarray,2,lognormsd)
