@@ -1,9 +1,7 @@
-tmpstrat <- as.numeric(commandArgs(trailingOnly = TRUE)[1])
 expdir <- "test"
 
 source("R/model-core.R")
 source("R/metrics.R")
-devtools::load_all(".")
 tmpdir <- expdir
 n=0
 while(dir.exists(tmpdir)){
@@ -42,8 +40,9 @@ expnames <- expnames[apply(expnames,1,function(e)paste0(e,collapse="_")) %in% na
 
 expnames <- expnames[apply(expnames,1,function(e)paste0(e,collapse="_"))
 
-metrics <- c(d.sim, d.gap , d.turn, d.spec, d.unique, d.gini,d.lognormmean,d.lognormsd)
-names(metrics) <- c("d.sim", "d.gap" , "d.turn", "d.spec", "d.unique", "d.gini","d.lognormsd","d.lognormmean")
+metrics <- c(d.sim, d.gap , d.turn, d.min,d.max,d.mean,d.median, d.unique)
+names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median"," d.unique")
+names(metrics) <- 
 metrics=metrics[c(1,2,3,5)]
 
 #===== ABC for all strategies (including original model, unbiased and all the others
