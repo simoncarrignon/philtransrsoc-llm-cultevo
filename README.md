@@ -2,6 +2,9 @@
 
 This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
+## Content:
+
+
 ## Chain transmission with Chat GPT
 
 A dockerfile is provided to run the expeiremnt, which allow to easily re-run it regardless of the hardware or software you have.
@@ -26,8 +29,19 @@ docker build -t llmchain .
 
 And to run it you will need your OPENAIA KEY 
 
+I pass it using --env option from dockers, but many other option are possible. thus ou cna try:
 
+```bash
+docker run --rm  --env OPENAI_API_KEY=$OPENAI_API_KEY llmchain --help
+```
 
+A full command will look like that:
+
+```bash
+docker run --rm  -v ./results:/usr/src/app/results --env OPENAI_API_KEY=$OPENAI_API_KEY llmchain -N 20 -t 10 -k 5 --statements statements.txt --modprompt prompts/generatenew_random_health.prompt --selprompt prompts/select_random.prompt --outdir "results/"
+```
+
+Where is -v is used to link the output folder within the docker with a local folder
 
 For the python version:
 
@@ -41,19 +55,15 @@ This use the python virtual env:
 ./bin/python3 gptCultEv.py
 ```
 
-
-So far nothing as been parametrized and thing (mutation rate, length of simulation, statements,...) needs to be hardcoded in the main python file gptCultEv
-
 Once the experiment is done two files are create: `alltstepbeta.pkl` & `variantsbeta.pkl`
 They store informaiton about the variants seleted through time and the satetment generated. They can be exctracted using:
 
 ```bash
-python3 get_top_ten.py 
-python3 toCSV.py 
+python3 get_top_ten.py  --outdir results
+python3 toCSV.py --outdir results > results.csv
 ```
-
-- `get_top_ten.py` printsthe 10 most used statements at the end of the simulation
-- `toCSV.py` creates a csv with the number of instance who choose each traits ; one row per time step and one column per statement 
+- `get_top_ten.py` prints the 10 most used statements at the end of the simulation
+- `toCSV.py` creates a csv with how many  agents have choose each traits ; one row per time step and one column per statement 
 
 ## Model of Cultural Transmission
 
@@ -65,4 +75,4 @@ Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022
 
 Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0570 and others
 
-### Theoretical
+### how too
