@@ -1,3 +1,4 @@
+import argparse
 from openai import OpenAI
 from multiprocessing import Pool
 import sys,os
@@ -11,7 +12,6 @@ import random
 import pickle
 import time
 import requests
-import argparse
 
 parser = argparse.ArgumentParser(description='gpt evol app')
 parser.add_argument('--outdir', action="store", dest='outdir', default='.')
@@ -25,11 +25,12 @@ parser.add_argument('-mu', action="store", dest='mu', default=0.1)
 parser.add_argument('--mutate', action="store", dest='mutate', default=False)
 parser.add_argument('--image', action="store", dest='image', default=False)
 parser.add_argument('--checkmod', action="store", dest='checkmod', default=False)
+parser.add_argument('--agents', action="store", dest='nagents', default="20")
 args = parser.parse_args()
 outdir=args.outdir
 K=int(args.K)
-N=int(args.N)
 tstep=int(args.tstep)
+nagents=int(args.nagents)
 N=int(args.N)
 mu=float(args.mu)
 printImage = args.image
@@ -50,8 +51,6 @@ else :
     exp=exp+" new statements following "+modfile
 
 print(exp)
-
-
 
 
 def create_image_url(prompt):
@@ -162,7 +161,7 @@ def main():
     allsuggests=list()
     allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
     newstatements=[]
-    with Pool(processes=20) as pool:
+    with Pool(processes=nagents) as pool:
         for t in range(0,tstep):
             print("timestep: "+str(t)+" =============="+"\n")
             selslots=[] #slots retained
@@ -217,7 +216,7 @@ def main():
                 ninov=max(K*mu,1)
                 #sel=random.sample(range(len(selind)),int(ninov))
                 sel = random.sample(selslots, k=int(ninov))
-                print("generating "+str(len(sel))+" new statements at individual level:")
+                print("generating "+str(len(sel))+" new statements at slot level:")
             newstatements=[]
             for ns in sel:
                 new=None
