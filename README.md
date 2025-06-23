@@ -4,17 +4,27 @@ This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
 ## Chain transmission with Chat GPT
 
-To run the chain experiment, needs of python 
+A dockerfile is provided to run the expeiremnt, which allow to easily re-run it regardless of the hardware or software you have.
 
-### Install on Debian with venv
+First of all you will need to install docker : https://docs.docker.com/engine/install/
+
+On linux, don't forget to add yourself to the docker group if you don'twant to have to use sudo to run it
 
 ```bash
-sudo apt install python3.10-venv
-python3 -m venv . #activate environment in the local repo
-./bin/pip3 install openai  #install openai
-./bin/pip3 install requests
+   sudo groupadd docker
+   sudo usermod -aG docker $USER
 ```
 
+### Build and run the docker
+
+To build the docker
+
+```bash
+cd chain-llms/
+docker build -t llmchain .
+```
+
+And to run it you will need your OPENAIA KEY 
 
 
 
