@@ -1,7 +1,12 @@
-# Chain transmission with Chat GPT
+# Code and Data for paper 
 
+This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
-## Install on Debian with venv
+## Chain transmission with Chat GPT
+
+To run the chain experiment, needs of python 
+
+### Install on Debian with venv
 
 ```bash
 sudo apt install python3.10-venv
@@ -40,3 +45,14 @@ python3 toCSV.py
 - `get_top_ten.py` printsthe 10 most used statements at the end of the simulation
 - `toCSV.py` creates a csv with the number of instance who choose each traits ; one row per time step and one column per statement 
 
+## Model of Cultural Transmission
+
+Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0570 and others
+
+### Theoretical
+
+## Approximate Bayesian Computation
+
+Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0570 and others
+
+### Theoretical
