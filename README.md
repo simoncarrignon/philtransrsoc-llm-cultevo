@@ -1,6 +1,7 @@
-# Code and Data for paper 
+Code and Data for paper 
+======================
 
-This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
+***This is a fork of: https://github.com/simoncarrignon/llm-cult-evol***
 
 # Project Overview
 
