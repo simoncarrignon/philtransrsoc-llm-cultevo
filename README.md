@@ -7,40 +7,49 @@ This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
 project contains several scripts, prompts, and results related to language model exploration using Cultural Evolution model. Below is a structured overview of the directory contents, designed to help you navigate the repository efficiently.
 
-### Directory Structure
+## Directory Structure
 
 - 📁 **Root Directory:**
-  - 📄 `lastautoExplor.sh`: A shell script likely used for automation or exploration tasks.
-  - 📄 `lis`: A list file, potentially containing itemized data or configurations.
-  - 📄 `README.md`: The file you are currently reading.
-  - 📜 `read.R`: An R script for data processing or analysis.
-  - 🗃️ `results.csv`: A CSV file containing consolidated results or data outputs.
+  - 📄 **`README.md`**: The main documentation file you're reading now, outlining important aspects of the project and how to engage with the repository.
 
-- 📁 **chain-llms/**:
-  - 📄 `Dockerfile`: Configuration for setting up the Docker environment.
-  - 📄 `get_top_ten.py`: A Python script to extract top ten statement from an experiment
-  - 📄 `get_top_two_time.py`: cf above
-  - 📄 `gptCultEv.py`: core script to generate a chain experiment, described below
-  - 📓 `GPTEVOL.ipynb`: Jupyter Notebook to interactively play with LLMs and reproduce the expeirment
-  - 📃 `requirements.txt`: A listing of Python dependencies necessary for the project.
+- 📁 **`/data/`:**
+  - 📜 **High-Level Datasets**:
+    - 📄 **`GPT3.5_gennew_concatenated_files.csv`**: Data generated through new statement creation using GPT-3.5.
+    - 📄 **`GPT4_mut_concatenated_files.csv`**: Results from mutation experiments using GPT-4.
+    - 📄 **`O3MINI_gennew_concatenated_files.csv`** and **`O3MINI_mut_concatenated_files.csv`**: Results from the O3MINI model, for generating new statements and mutations.
+  - 📂 **Chains Data**:
+    - Each subdirectory (e.g., `expK50N100T100_mutoriginal_selattractive_O3MINI`) contains:
+      - 📄 **`processed_statements.csv`**: Represents experiments with specific configurations related to mutation, selection, and model type integration.
 
-  - 📁 **prompts/**:
-    - Contains prompt files used to drive the experiment
-      - 📜 `generatenew_attractive_health.prompt`
-      - 📜 `generate_new_convincing.prompt`
-      - 📜 `generatenew_efficient_health.prompt`
-      - 📜 `generatenew_original_health.prompt`
-      - 📜 `generatenew_random_health.prompt`
-      - 📜 `modify_previous_for_more_attractive.prompt`
-      - 📜 `modify_previous_for_more_efficient.prompt`
-      - 📜 `modify_previous_for_more_original.prompt`
-      - 📜 `modify_previous_for_more_random.prompt`
-      - 📜 `modify_previous_random.prompt`
-      - 📜 `select_attractive.prompt`
-      - 📜 `select_efficient.prompt`
-      - 📜 `select_original.prompt`
-      - 📜 `select_random.prompt`
+- 📁 **`/abc/`:**
+  - 📜 **R Scripts:**
+    - 📄 **`model-core.R`**, **`abcrfa.R`**, **`metrics.R`**: R scripts facilitating model implementation, metric computation, and ABC application.
+  - 📜 **Project Execution Script**:
+    - 📄 **`abc_paper_small.R`**: R script for executing small-scale tests of the ABC model and generating results.
 
+- 📁 **`/analysis/`:**
+  - 📜 **R Scripts:**
+    - 📄 **`newcombine.R`**: Combines datasets for further analysis.
+    - 📄 **`plot_abc_posteriors.R`**: Script to visualize ABC posteriors.
+
+- 📁 **`/chain-llms/`:**
+  - 📜 **Core Python Scripts:**
+    - 📄 **`gptCultEv.py`**: Main Python script to orchestrate and simulate chain experiments.
+    - 📄 **`get_top_ten.py`**, **`get_top_two_time.py`**: Scripts to extract full statement from `.pkl` of most frequent statements.
+    - 📄 **`toCSV.py`**: Converts `.pkl` file CSV format for accessibility and further analysis.
+  - 📓 **Notebook**:
+    - 📓 **`GPTEVOL.ipynb`**: Interactive Jupyter Notebook for experimenting with language models.
+  - 📜 **Configuration:**
+    - 📄 **`Dockerfile`**: Defines the Docker environment setup.
+    - 📃 **`requirements.txt`**: Lists Python dependencies for the experiments.
+
+  - 📁 */chain-llms/prompts/** 
+    - 📜 Contains various `.prompt` files for model interactions to guide AI behavior (selection and mutation operator)
+
+  - 📜 **Automation and Utilities:**
+    - 📄 **`lastautoExplor.sh`**: Shell script for automation of exploratory tasks.
+    - 📜 **Scripts for Data Management**:
+      - 📄 **`extract_all.py`**, **`extractall.sh`**, **`concatall.sh`**: Scripts and shell commands for managing and processing experiment data files.
 
 # Chain transmission with Chat GPT
 
@@ -110,6 +119,6 @@ Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022
 
 # Approximate Bayesian Computation
 
-Model inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0570 and others
+This implementatio of ABC rely on random forest to adjust the posterior distribution based on multiple summary statistique.
 
 ## how too
