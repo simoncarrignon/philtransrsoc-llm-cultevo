@@ -43,7 +43,10 @@ expnames <- expnames[apply(expnames,1,function(e)paste0(e,collapse="_")) %in% na
 
 metrics <- c(d.sim, d.gap , d.turn, d.min,d.max,d.mean,d.median, d.unique)
 names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median","d.unique")
-metrics  <-  metrics[-c(5:8)]
+metrics  <-  metrics[-c(4:7)]
+#for all metrics we mesure the distance to all original scenario
+mtr=names(metrics);names(mtr)=mtr
+mdl=names(allexp);names(mdl)=mdl
 
 #===== ABC for all strategies (including original model, unbiased and all the others
 library(parallel)
@@ -60,9 +63,6 @@ for(strat in strats){#,paste0("s4g11",c("a","b","c")))){
             res=model(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F)$freq
             #for all 'data'(our fake scenario), were subsample the simulaiton to match the shape of the modl
             simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
-            #for all metrics we mesure the distance to all original scenario
-            mtr=names(metrics);names(mtr)=mtr
-            mdl=names(allmetricsallex);names(mdl)=mdl
             ##  up is a trick to automatically names outcome of lapply.
             distances=lapply(mdl,function(m)sapply(mtr,function(d)RMSE(simumetrics[[d]],allmetricsallex[[m]][[d]])))
             rm(simumetrics)
