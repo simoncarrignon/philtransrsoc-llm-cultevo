@@ -1,5 +1,10 @@
 list_allposteriors <- readRDS(file="data/list_allposteriors.RDS")
 par(mfrow=c(3,2),cex=1)
+colnames(expnames) <- c("Mutation","Selection")
+cols=palette.colors(n=length(unique(expnames$Mutation)),palette="Set 2")
+names(cols)=unique(expnames$Mutation)
+pchs=20+1:length(unique(expnames$Selection)) 
+names(pchs)=unique(expnames$Selection)
 models  <-  c("GPT3.5","GPT4","O3MINI")
 for(mv in models){
 for( ge in names(file_results)){
@@ -9,11 +14,6 @@ for( ge in names(file_results)){
    allmodes <- tmp$allmodes
    expnames  <- do.call("rbind.data.frame",strsplit(names(alladjustment),"_"))
    exnames <- names(tmp$alladjustment)
-   colnames(expnames) <- c("Mutation","Selection")
-   cols=palette.colors(n=length(unique(expnames$Mutation)),palette="Set 2")
-   names(cols)=unique(expnames$Mutation)
-   pchs=20+1:length(unique(expnames$Selection)) 
-   names(pchs)=unique(expnames$Selection)
    plot(1,1,ylim=c(0,2),xlim=c(0,2),main=paste(mv,ge),type="n",ylab=expression(beta),xlab="J")
    for(e in 1:nrow(expnames)){
        en <- paste0(expnames[e,],collapse="_")
