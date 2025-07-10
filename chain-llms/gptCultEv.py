@@ -2,6 +2,7 @@ import argparse
 from openai import OpenAI
 from multiprocessing import Pool
 import sys,os
+import numpy as np
 
 # Set up the OpenAI API client
 print("get connection")
@@ -161,6 +162,7 @@ def main():
     allsuggests=list()
     allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
     newstatements=[]
+    inprompt=[]
     with Pool(processes=nagents) as pool:
         for t in range(0,tstep):
             print("timestep: "+str(t)+" =============="+"\n")
@@ -178,6 +180,8 @@ def main():
                     selslots=selslots+newstatements
                 print("in the "+str(K)+" slots we retain:")
                 print(selslots)
+                for s in np.unique(selslots):
+                    print(str(s)+" is counted "+str(suggest[s]['counter']))
             if exptype == "beta":
                 prompt=pre
             else:
@@ -185,6 +189,7 @@ def main():
             for s in selslots:
                 if(suggest[s]['counter']>0):prompt=prompt+"\n"+str(s)+" : "+suggest[s]["statement"]
             prompt=prompt+"\n"+post
+            inprompt.append(selslots)
             #print(prompt)
             #results = pool.map(chat_with_gpt, [prompt]*N)
             selind=[] #individual selection 
@@ -263,6 +268,8 @@ def main():
             allsuggests.append( [suggest[s]['counter'] for s in suggest.keys()])
             with open(os.path.join(outdir,'alltstep'+exptype+'.pkl'), 'wb') as tstp:
                 pickle.dump(allsuggests, tstp, pickle.HIGHEST_PROTOCOL)
+            with open(os.path.join(outdir,'inprompt'+exptype+'.pkl'), 'wb') as inpt:
+                pickle.dump(inprompt, inpt, pickle.HIGHEST_PROTOCOL)
             #print(allsuggests)
 
     
