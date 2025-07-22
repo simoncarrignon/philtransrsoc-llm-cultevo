@@ -9,4 +9,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the experiment when the container launches
-ENTRYPOINT ["python", "gptCultEv.py"]
+ENTRYPOINT ["/bin/sh", "lastautoExplor.sh"]
