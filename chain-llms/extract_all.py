@@ -20,6 +20,8 @@ output_file_path = os.path.join(outdir, "processed_statements.csv")
 
 # Open the output file in write mode
 with open(output_file_path, "w") as output_file:
+    output_file.write('Step,ID,Count,InPromptCount,Statement\n')
+
     # Iterate through the list of steps
     for step_index, steps in enumerate(all_steps):
         # Iterate through each value in the step

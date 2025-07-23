@@ -1,7 +1,7 @@
 import argparse
 from openai import OpenAI
 from multiprocessing import Pool
-import sys,os
+import sys,os,re
 import numpy as np
 
 # Set up the OpenAI API client
@@ -72,18 +72,20 @@ def download_image(url, filename):
     else:
         print(f"Failed to download image, status code: {response.status_code}")
 
-def checkind(ind,maxind):
+def checkind(ind,valid_indices):
     #print(str(ind)+" : "+str(maxind))
     try:
-        i= int(ind)
-        if(i<=maxind and i>=0):
+        cleaned_ind = re.sub(r'\D', '', ind)
+        i= int(cleaned_ind)
+        if i in valid_indices:
             return i
         else:
-            return random.randint(1,maxind)
+            print("problem with answer : "+ind+", as "+str(i))
+            return None
     except ValueError as e:
-        print("not good"+str(ind))
+        print("not good "+str(ind))
         #return random.randint(1,maxind)
-        time.sleep(10)
+        time.sleep(1)
         return None
 
 def chat_with_gpt(prompt):
@@ -99,18 +101,18 @@ def read_from_file(fname):
     return lines
 
 def get_number_from_prompt(args):
-    prompt, maxind = args
+    prompt, valid_indices = args
     num=None
     while num is None:
         try:
            #print("api call:"+str(len(prompt)))
            resnum=chat_with_gpt(prompt)
-           num=checkind(resnum,maxind)
-           print("done api call of "+str(len(prompt))+" characters")
+           num=checkind(resnum,valid_indices)
+           print("done api call of "+str(len(prompt))+" characters, choice made: "+str(num))
         except Exception as e:
            print(e) 
-           print("nonum") 
-           time.sleep(10)
+           print("problem checking number") 
+           time.sleep(1)
            num=None
     return num 
 
@@ -193,11 +195,12 @@ def main():
             #print(prompt)
             #results = pool.map(chat_with_gpt, [prompt]*N)
             selind=[] #individual selection 
+            print("valid choice are: "+str(selslots) + "\n" +  "in prompt:\n" + prompt)
             if isRandom:
                 weights = [suggest[i]['counter'] for i in suggest.keys()]
                 selind = random.choices(range(len(suggest)),weights=weights,k=N)
             else: 
-                selind = pool.map(get_number_from_prompt, [(prompt,len(suggest.keys()))]*N)
+                selind = pool.map(get_number_from_prompt, [(prompt,list(selslots))]*N)
             allsel.append(selind)
             #reset counters
             for s in suggest.keys():
