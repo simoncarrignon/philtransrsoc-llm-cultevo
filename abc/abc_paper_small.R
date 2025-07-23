@@ -1,6 +1,7 @@
 expdir <- "test"
 
 source("R/model-core.R")
+source("R/model-slots.R")
 source("R/abcrfa.R")
 source("R/metrics.R")
 tmpdir <- expdir
@@ -20,7 +21,7 @@ p0=rep(N/m,m)
 u0="rnorm"
 mu=.1
 
-ns=50000
+ns=1000
 Js=runif(ns,0,1.5) 
 betas=runif(ns,0,1.5) 
 prior <- list(J=Js,beta=betas)
@@ -32,7 +33,7 @@ metrics  <-  metrics[-c(4:7)]
 mtr=names(metrics);names(mtr)=mtr
 library(parallel)
 
-models  <-  c("GPT3.5","GPT4","O3MINI")
+models  <-  c("GPT3.5","GPT4","O3MINI")[1]
 file_results  <- list("Mutate statements"="mut","Generate new statements"="gennew")
 list_alladjustments <- list()
 for(mv in models){
@@ -59,13 +60,13 @@ for(mv in models){
            tryCatch(
            {
                if(i%%5==0)print(i)
-               res=model(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F)$freq
+               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F)$freq
                #for all 'data'(our fake scenario), were subsample the simulaiton to match the shape of the modl
                simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
                ##  up is a trick to automatically names outcome of lapply.
                distances=lapply(mdl,function(m)sapply(mtr,function(d)RMSE(simumetrics[[d]],allmetricsallex[[m]][[d]])))
                rm(simumetrics)
-               gc()
+               gc(reset=T,verbose=F)
                return(distances)
            },error=function(i){
                return(paste0("problem with this",i))
