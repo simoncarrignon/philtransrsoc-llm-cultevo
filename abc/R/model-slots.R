@@ -61,21 +61,14 @@ model.slot <- function(p0,J,u0,unit=NULL,beta,sde,tstep,mu,N,m,prob=p,mutate=TRU
         remainings=which(pt>0) 
         pb=N-sum(pt)
         stopifnot(!is.na(pb))
-        if(pb!=0){ #if we loose/win things with rounding then we have to remove/add some
-            #This should not happen anymore
-            print(paste("Ne:",sum(pt>0),",pb size:",pb,",N:",N))
-            enough=which(pt>1)
-            ind=sample(enough,abs(pb),replace=TRUE) #randomly choose some variant among the remaining
-            #print(paste("neg int:",paste0(pt[pt<0],collapse=",")))
-            for(i in ind){
-                pt[i]=pt[i] + sign(pb)  #add or remove 
-            }
-        }
+        stopifnot(pb==0)
 
         if(useslots) newTraits <- rbinom(1,K,mu)
         else newTraits <- rbinom(1,N,mu)
+
         if(length(remainings)==1) slots <- rep(remainings,K-newTraits)
         else slots <- sample(x=remainings,size=K-newTraits,prob=pt[remainings],replace=T)
+
         if(newTraits>0){ #we choose among the cultural traits the one that will loose users (user who will innovate)
             remainings=which(pt>0) 
 			if(length(remainings)==1){ #handling case with 1
@@ -101,18 +94,9 @@ model.slot <- function(p0,J,u0,unit=NULL,beta,sde,tstep,mu,N,m,prob=p,mutate=TRU
                         else{
                             epsilons=get(u0)(newTraits,0,e)
                         }
-                        if(any(is.na(epsilons))){
-                            print(epsilons)
-                            print(u0)
-                        }
+                        stopifnot(all(!is.na(epsilons)))
                     }
                     lnewtraits=u[inovators]+epsilons
-                    if(any(is.na(lnewtraits))){
-                       print("new traits")
-                       print(lnewtraits)
-                       print("inovators")
-                       print(inovators)
-                    }
                 }
                 else if(cumul){ 
                     newm=mean(u[pt>0])
@@ -141,7 +125,6 @@ model.slot <- function(p0,J,u0,unit=NULL,beta,sde,tstep,mu,N,m,prob=p,mutate=TRU
     }
     final=final[seq_along(u),] #remove empty row that weren't used (save space)
     return(list(freq=final,ut=u))
-
 }
 
 
