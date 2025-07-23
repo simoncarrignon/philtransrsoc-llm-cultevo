@@ -21,10 +21,11 @@ p0=rep(N/m,m)
 u0="rnorm"
 mu=.1
 
-ns=1000
-Js=runif(ns,0,1.5) 
-betas=runif(ns,0,1.5) 
-prior <- list(J=Js,beta=betas)
+ns=5000
+e=runif(ns,0,5)
+Js=runif(ns,0,2) 
+betas=runif(ns,0,2) 
+prior <- list(J=Js,beta=betas,e=e)
 
 metrics <- c(d.sim, d.gap , d.turn, d.min,d.max,d.mean,d.median, d.unique)
 names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median","d.unique")
@@ -33,12 +34,14 @@ metrics  <-  metrics[-c(4:7)]
 mtr=names(metrics);names(mtr)=mtr
 library(parallel)
 
+burnin=1:2 #discard two first steps
 models  <-  c("GPT3.5","GPT4","O3MINI")[1]
 file_results  <- list("Mutate statements"="mut","Generate new statements"="gennew")
 list_alladjustments <- list()
+experiment <- 'data' #sotre the concatenated_files.csv in a different folde rto explore ifferent experiment
 for(mv in models){
-    for( ge in names(file_results)){
-       expfilenames <- file.path(here::here(),"data",paste(mv,file_results[[ge]],"concatenated_files.csv",sep = "_"))
+    for( ge in names(file_results[1])){
+       expfilenames <- file.path(here::here(),experiment,paste(mv,file_results[[ge]],"concatenated_files.csv",sep = "_"))
        allexp <- read.csv(expfilenames)
        expnames <- unique(allexp[,c("Mutation","Selection")])
        exnames <- apply(expnames,1,function(e)paste0(e,collapse="_"))
@@ -46,7 +49,7 @@ for(mv in models){
           subex <- allexp[allexp$Mutation == expnames[e,"Mutation"] & allexp$Selection == expnames[e,"Selection"],] 
           subex <- unname(reshape(subex[,3:5], idvar = "ID", timevar = "Step", direction = "wide")[,-1])
           subex[is.na(subex)] <- 0
-          return(subex)
+          return(subex[,-burnin])
        })
        names(allexp) <- exnames
        mdl=names(allexp);names(mdl)=mdl
@@ -60,7 +63,7 @@ for(mv in models){
            tryCatch(
            {
                if(i%%5==0)print(i)
-               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F)$freq
+               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=e[i],tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)$freq[,-burnin]
                #for all 'data'(our fake scenario), were subsample the simulaiton to match the shape of the modl
                simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
                ##  up is a trick to automatically names outcome of lapply.
@@ -112,7 +115,7 @@ for(mv in models){
        list_alladjustments[[gsub(" ","_",tolower(strat))]] <- list(alladjustment=alladjustment,allmodes=allmodes,alldismult=alldismulti)
     }
 }
-saveRDS(file="data/list_allposteriors.RDS",list_alladjustments)
+saveRDS(file=file.path(experiment,"list_allposteriors.RDS"),list_alladjustments)
     
 
 
