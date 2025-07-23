@@ -141,6 +141,6 @@ p <- function(p_t, J, u, beta, sde){
   eps <- `if`(sde > 0, rnorm(length(p_t), mean = 0, sd = sde), 0)
   p <- p_t^J * exp(beta*u + eps)
   p_t <- p / sum(p)
-  return(replace(p_t, is.na(p_t), 1/sum(is.na(p_t))))
+  return(replace(p_t, is.na(p_t), 1/sum(is.na(p_t)))) #this is problematic for very high J and beta 
 }
 
