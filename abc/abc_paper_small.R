@@ -1,17 +1,20 @@
-expdir <- "test"
+outdir <- commandArgs(trailingOnly = TRUE)[1]#folder where  output of ABC will be written
+experiment <- commandArgs(trailingOnly = TRUE)[2]#folder where  the concatenated_files.csv are stored 
+outdir <- "no_mutation" #commandArgs(trailingOnly = TRUE)[1]#folder where  output of ABC will be written
+experiment <- "data"
 
 source("R/model-core.R")
 source("R/model-slots.R")
 source("R/abcrfa.R")
 source("R/metrics.R")
-tmpdir <- expdir
+tmpdir <- outdir
 n=0
-while(dir.exists(tmpdir)){
+while(dir.exists(file.path(here::here(),tmpdir))){
     n <- n+1
-    tmpdir <- paste0(expdir,"_",n)
+    tmpdir <- paste0(outdir,"_",n)
 }
-expdir <- tmpdir
-dir.create(expdir)
+outdir <- tmpdir
+dir.create(file.path(here::here(),outdir))
 
 set.seed(1234)
 m=10
@@ -21,8 +24,9 @@ p0=rep(N/m,m)
 u0="rnorm"
 mu=.1
 
-ns=5000
-e=runif(ns,0,5)
+ns=500000
+e=runif(ns,1,2)
+e=rep(1,ns)
 Js=runif(ns,0,2) 
 betas=runif(ns,0,2) 
 prior <- list(J=Js,beta=betas,e=e)
@@ -38,9 +42,8 @@ burnin=1:2 #discard two first steps
 models  <-  c("GPT3.5","GPT4","O3MINI")[1]
 file_results  <- list("Mutate statements"="mut","Generate new statements"="gennew")
 list_alladjustments <- list()
-experiment <- 'data' #sotre the concatenated_files.csv in a different folde rto explore ifferent experiment
 for(mv in models){
-    for( ge in names(file_results[1])){
+    for( ge in names(file_results)){
        expfilenames <- file.path(here::here(),experiment,paste(mv,file_results[[ge]],"concatenated_files.csv",sep = "_"))
        allexp <- read.csv(expfilenames)
        expnames <- unique(allexp[,c("Mutation","Selection")])
@@ -58,7 +61,7 @@ for(mv in models){
        cat(paste0("Running ABCRFA inference for: \n ",strat," strategy, using ",length(metrics)," metrics (",paste0(names(metrics),collapse=","),") ========\n"))
        allmetricsallex <- lapply(allexp,function(exp)lapply(metrics,function(f)f(exp)))
     
-       cl <- makeCluster(20,"FORK",outfile=file.path("test",paste0(gsub(" ","_",tolower(strat)), "_log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log")))
+       cl <- makeCluster(25,"FORK",outfile=file.path("test",paste0(gsub(" ","_",tolower(strat)), "_log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log")))
        alldismulti <- parLapply(cl,1:ns,function(i) {
            tryCatch(
            {
@@ -76,7 +79,9 @@ for(mv in models){
            })
        })
        stopCluster(cl)
-       saveRDS(file=file.path(expdir,paste0(gsub(" ","_",tolower(strat)), "_result_abc_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".RDS")),alldismulti)
+       outsim_file <- file.path(here::here(),outdir,paste0(gsub(" ","_",tolower(strat)), "_result_abc_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".RDS"))
+       cat(paste0("saving All simulations distance  in: ",outsim_file),"\n")
+       saveRDS(file=outsim_file,alldismulti)
 
        success <- sapply(alldismulti,length)==length(mdl)
        allresults <- alldismulti[success] #removing simulation that fail on on model
@@ -84,6 +89,7 @@ for(mv in models){
        prior.cl <- lapply(prior,'[',1:ns)  #limit simulation to look at
        prior.cl <- lapply(prior.cl,'[',success) #rimove simu that failed
        params=do.call("cbind",prior.cl)
+       rm(alldismult)
 
        #we read how many column we colect, column should be the name of the metric used
        exclfunc=c()#c("d.lognormsd"",""d.lognormmean")#,"d.gini")
@@ -100,11 +106,12 @@ for(mv in models){
            params=params[-excluded,]
            cleaned=lapply(cleaned,function(data)data[-excluded,])
        }
+       rm(allresults)
     
        ##run adjustment
        alladjustment=lapply(cleaned,function(modelresult){
            artif=modelresult[,disfunc]
-           model.rfa <- abcrfa(obs, param = params, sumstat = artif , tol = .01)
+           model.rfa <- abcrfa(obs, param = params[,-3], sumstat = artif , tol = .001)
            cor=model.rfa$adj.values[,2]>0 & model.rfa$adj.values[,1]>0
            model.rfa$adj.values=apply(model.rfa$adj.values,2,function(i)i[cor])
            model.rfa
@@ -112,10 +119,12 @@ for(mv in models){
        names(alladjustment)=names(cleaned)
        allmodes=lapply(alladjustment,function(adj){ apply(adj$adj.values,2,function(i)hdrcde::hdr(i)$mode) })
 
-       list_alladjustments[[gsub(" ","_",tolower(strat))]] <- list(alladjustment=alladjustment,allmodes=allmodes,alldismult=alldismulti)
+       list_alladjustments[[gsub(" ","_",tolower(strat))]] <- list(alladjustment=alladjustment,allmodes=allmodes)#,alldismult=alldismulti)
     }
 }
-saveRDS(file=file.path(experiment,"list_allposteriors.RDS"),list_alladjustments)
+outfile <- file.path(here::here(),outdir,"list_allposteriors.RDS")
+cat(paste0("saving all output in: ",outfile),"\n")
+saveRDS(file=outfile,list_alladjustments)
     
 
 
