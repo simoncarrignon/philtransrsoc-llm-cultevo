@@ -5,8 +5,8 @@ K=50
 output_file="concatenated_files.csv"
 
 # Write headers to the output file
-echo "Mutation,Selection,Step,ID,Count,Statement" > "${mdl}_mut_$output_file"
-echo "Mutation,Selection,Step,ID,Count,Statement" > "${mdl}_gennew_$output_file"
+echo "Mutation,Selection,Step,ID,Count,InPrompts,Statement" > "${mdl}_mut_$output_file"
+echo "Mutation,Selection,Step,ID,Count,InPrompts,Statement" > "${mdl}_gennew_$output_file"
 
 for mut in original efficient random attractive; do
     for sel in efficient attractive original random; do
