@@ -3,6 +3,12 @@ N=100
 t=100
 K=50
 output_file="concatenated_files.csv"
+#
+# Check if mdl parameter is passed
+if [ -z "$mdl" ]; then
+    echo "Provide a model name"
+    exit 1
+fi
 
 # Write headers to the output file
 echo "Mutation,Selection,Step,ID,Count,InPrompts,Statement" > "${mdl}_mut_$output_file"
