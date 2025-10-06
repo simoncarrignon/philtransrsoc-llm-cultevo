@@ -1,7 +1,5 @@
 outdir <- commandArgs(trailingOnly = TRUE)[1]#folder where  output of ABC will be written
 experiment <- commandArgs(trailingOnly = TRUE)[2]#folder where  the concatenated_files.csv are stored 
-outdir <- "no_mutation" #commandArgs(trailingOnly = TRUE)[1]#folder where  output of ABC will be written
-experiment <- "data"
 
 source("R/model-core.R")
 source("R/model-slots.R")
@@ -24,12 +22,13 @@ p0=rep(N/m,m)
 u0="rnorm"
 mu=.1
 
-ns=500000
+ns=100000
 e=runif(ns,1,2)
 e=rep(1,ns)
 Js=runif(ns,0,2) 
 betas=runif(ns,0,2) 
 prior <- list(J=Js,beta=betas,e=e)
+
 
 metrics <- c(d.sim, d.gap , d.turn, d.min,d.max,d.mean,d.median, d.unique)
 names(metrics) <- c("d.sim"," d.gap "," d.turn"," d.min","d.max","d.mean","d.median","d.unique")
@@ -38,13 +37,16 @@ metrics  <-  metrics[-c(4:7)]
 mtr=names(metrics);names(mtr)=mtr
 library(parallel)
 
-burnin=1:2 #discard two first steps
+burnin=1:2 #discard two first steps which are 
 models  <-  c("GPT3.5","GPT4","O3MINI")[1]
+models <- "Mistral-7B-Instruct-v0.3"
+
 file_results  <- list("Mutate statements"="mut","Generate new statements"="gennew")
 list_alladjustments <- list()
 for(mv in models){
     for( ge in names(file_results)){
        expfilenames <- file.path(here::here(),experiment,paste(mv,file_results[[ge]],"concatenated_files.csv",sep = "_"))
+    print(expfilenames)
        allexp <- read.csv(expfilenames)
        expnames <- unique(allexp[,c("Mutation","Selection")])
        exnames <- apply(expnames,1,function(e)paste0(e,collapse="_"))
@@ -66,9 +68,11 @@ for(mv in models){
            tryCatch(
            {
                if(i%%5==0)print(i)
-               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=e[i],tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)$freq[,-burnin]
+               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)$freq[,-burnin]
                #for all 'data'(our fake scenario), were subsample the simulaiton to match the shape of the modl
+               #saveRDS(file=file.path(here::here(),outdir,paste0(i,"_full.RDS")),res)
                simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
+               #simumetrics=readRDS(file=file.path(here::here(),outdir,paste0(i,"_simumetrics.RDS")))
                ##  up is a trick to automatically names outcome of lapply.
                distances=lapply(mdl,function(m)sapply(mtr,function(d)RMSE(simumetrics[[d]],allmetricsallex[[m]][[d]])))
                rm(simumetrics)
@@ -111,7 +115,7 @@ for(mv in models){
        ##run adjustment
        alladjustment=lapply(cleaned,function(modelresult){
            artif=modelresult[,disfunc]
-           model.rfa <- abcrfa(obs, param = params[,-3], sumstat = artif , tol = .001)
+           model.rfa <- abcrfa(obs, param = params[,-3], sumstat = artif , tol = .01)
            cor=model.rfa$adj.values[,2]>0 & model.rfa$adj.values[,1]>0
            model.rfa$adj.values=apply(model.rfa$adj.values,2,function(i)i[cor])
            model.rfa
