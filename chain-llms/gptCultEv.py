@@ -6,8 +6,13 @@ import numpy as np
 
 # Set up the OpenAI API client
 print("get connection")
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+#client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 print("done")
+
+client = OpenAI(
+    base_url="http://localhost:8080/v1",  # "http://<Your api-server IP>:port"
+    api_key="sk-no-key-required"
+)
 
 import random
 import pickle
@@ -89,10 +94,11 @@ def checkind(ind,valid_indices):
         return None
 
 def chat_with_gpt(prompt):
-  response = client.chat.completions.create(model="gpt-3.5-turbo",
-  messages=[
-    {"role": "user", "content": prompt}
-  ])
+  response = client.chat.completions.create(
+          model="MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF",
+          messages=[ {"role": "user", "content": "[INST]"+prompt+"[//INST]"} ],
+          max_tokens=50)
+        
   answer = response.choices[0].message.content
   return answer
 def read_from_file(fname):
