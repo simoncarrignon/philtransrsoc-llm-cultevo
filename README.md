@@ -80,6 +80,69 @@ This implementatio of ABC rely on random forest to adjust the posterior distribu
 
 ## how too
 
+# Local/open source AI model:
+
+## llamacpp-server:
+
+With ubunt, enough to download pre-build release from https://github.com/ggml-org/llama.cpp/
+
+```bash
+wget https://github.com/ggml-org/llama.cpp/releases/download/b6697/llama-b6697-bin-ubuntu-x64.zip
+./bin/llama-server -hf MaziyarPanahi/Mistral-7B-Instruct-v0.1-GGUF -hft ${HF_TOKEN} 
+```
+where `${HF_TOKEN}` is Hugging Face token to download the model
+
+
+## Run the chain: 
+replace open AI clien by localhost server:
+
+```python
+#replace this:
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+# By this:
+client = OpenAI(
+    base_url="http://localhost:8080/v1",  # "http://<Your api-server IP>:port"
+    api_key="sk-no-key-required"
+)
+```
+
+Adjust the chat completion to the model used.
+ 
+```python
+#replace this:
+ def chat_with_gpt(prompt):
+  response = client.chat.completions.create(model="gpt-3.5-turbo",
+  messages=[
+    {"role": "user", "content": prompt}
+  ])
+```
+
+Can become something like this:
+
+```python
+  response = client.chat.completions.create(
+          model="MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF",
+          messages=[ {"role": "user", "content": "[INST]"+prompt+"[//INST]"} ],
+          max_tokens=50)
+```
+
+If the server is running properly, then you can run all chains using the script
+
+
+```bash
+cd chain-llms/
+bash lastautoExplor.sh
+```
+
+And extract the result using:
+
+```bash
+./chain-llms/process_simulation.sh
+```
+
+
+
 ## Directory Structure
 
 - 📁 **Root Directory:**
