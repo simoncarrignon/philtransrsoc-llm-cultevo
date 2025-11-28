@@ -1,5 +1,6 @@
 outdir <- commandArgs(trailingOnly = TRUE)[1]#folder where  output of ABC will be written
-experiment <- commandArgs(trailingOnly = TRUE)[2]#folder where  the concatenated_files.csv are stored 
+experiment <- commandArgs(trailingOnly = TRUE)[2]#folder where the concatenated_files.csv are stored 
+loadsimu=TRUE
 
 source("R/model-core.R")
 source("R/model-slots.R")
@@ -22,7 +23,7 @@ p0=rep(N/m,m)
 u0="rnorm"
 mu=.1
 
-ns=100000
+ns=500000
 e=runif(ns,1,2)
 e=rep(1,ns)
 Js=runif(ns,0,2) 
@@ -38,8 +39,7 @@ mtr=names(metrics);names(mtr)=mtr
 library(parallel)
 
 burnin=1:2 #discard two first steps which are 
-models  <-  c("GPT3.5","GPT4","O3MINI")[1]
-models <- "Mistral-7B-Instruct-v0.3"
+models  <-  c("GPT3.5","GPT4","O3MINI","Mistral-7B-Instruct-v0.3")[c(1,4)]
 
 file_results  <- list("Mutate statements"="mut","Generate new statements"="gennew")
 list_alladjustments <- list()
@@ -63,17 +63,23 @@ for(mv in models){
        cat(paste0("Running ABCRFA inference for: \n ",strat," strategy, using ",length(metrics)," metrics (",paste0(names(metrics),collapse=","),") ========\n"))
        allmetricsallex <- lapply(allexp,function(exp)lapply(metrics,function(f)f(exp)))
     
-       cl <- makeCluster(25,"FORK",outfile=file.path("test",paste0(gsub(" ","_",tolower(strat)), "_log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log")))
+       cl <- makeCluster(10,"FORK",outfile=file.path("test",paste0(gsub(" ","_",tolower(strat)), "_log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log")))
        alldismulti <- parLapply(cl,1:ns,function(i) {
            tryCatch(
            {
                if(i%%5==0)print(i)
-               res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)$freq[,-burnin]
+               if(loadsimu && file.exists(here::here(outdir,paste0(i,"_full.RDS")))){
+                   simumetrics=readRDS(file=file.path(here::here(),outdir,paste0(i,"_simumetrics.RDS")))
+                   print("read backup")
+               }
+               else{
+
+                   res=model.slot(p0=p0,J=Js[i],u0=u0,beta=betas[i],sde=1,tstep=tstep,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)$freq[,-burnin]
                #for all 'data'(our fake scenario), were subsample the simulaiton to match the shape of the modl
-               #saveRDS(file=file.path(here::here(),outdir,paste0(i,"_full.RDS")),res)
-               simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
-               #simumetrics=readRDS(file=file.path(here::here(),outdir,paste0(i,"_simumetrics.RDS")))
-               ##  up is a trick to automatically names outcome of lapply.
+                   simumetrics=lapply(metrics,function(met)tryCatch(met(res),error=function(i)NA))
+                   saveRDS(file=file.path(here::here(),outdir,paste0(i,"_full.RDS")),res)
+                   saveRDS(file=file.path(here::here(),outdir,paste0(i,"_simumetrics.RDS")),simumetrics)
+               }
                distances=lapply(mdl,function(m)sapply(mtr,function(d)RMSE(simumetrics[[d]],allmetricsallex[[m]][[d]])))
                rm(simumetrics)
                gc(reset=T,verbose=F)
@@ -93,7 +99,7 @@ for(mv in models){
        prior.cl <- lapply(prior,'[',1:ns)  #limit simulation to look at
        prior.cl <- lapply(prior.cl,'[',success) #rimove simu that failed
        params=do.call("cbind",prior.cl)
-       rm(alldismult)
+       rm(alldismulti)
 
        #we read how many column we colect, column should be the name of the metric used
        exclfunc=c()#c("d.lognormsd"",""d.lognormmean")#,"d.gini")
@@ -115,7 +121,7 @@ for(mv in models){
        ##run adjustment
        alladjustment=lapply(cleaned,function(modelresult){
            artif=modelresult[,disfunc]
-           model.rfa <- abcrfa(obs, param = params[,-3], sumstat = artif , tol = .01)
+           model.rfa <- abcrfa(obs, param = params[,-3], sumstat = artif , tol = .001)
            cor=model.rfa$adj.values[,2]>0 & model.rfa$adj.values[,1]>0
            model.rfa$adj.values=apply(model.rfa$adj.values,2,function(i)i[cor])
            model.rfa
