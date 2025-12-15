@@ -95,9 +95,10 @@ def checkind(ind,valid_indices):
 
 def chat_with_gpt(prompt):
   response = client.chat.completions.create(
-          model="MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF",
-          messages=[ {"role": "user", "content": "[INST]"+prompt+"[//INST]"} ],
-          max_tokens=50)
+          model="Qwen/Qwen2.5-7B-GGUF",
+          messages=[ {"role": "user", "content": prompt} ],
+          max_tokens=50
+          )
         
   answer = response.choices[0].message.content
   return answer
@@ -162,7 +163,6 @@ def main():
     modifier=get_modifier(modfile)
 
     post="In your answer do not include anything else that the index of the statement you pick. Do not explain your choice or include anything. Only the number and nothing else, no justification or any other words or letter that isn't a number"
-    modpostbias=modifier
     suggest = {i: {'statement': statement, 'counter': round(N/len(statements))} for i, statement in enumerate(statements)}
 
     allsel=list()
@@ -238,22 +238,18 @@ def main():
                     modpost=""
                     try:
                         if exptype == "beta":
-                            modpost=modpostbias
+                            modpost=modifier #modifier is a prompt that can be of type mutate or gennew 
                         else:
                             modpost=modpostneut
-                        #modify:
-                        if mutate:
+                        if mutate: #if modifier is a mutate operatore, we add the selected prompt before the modifier, if not we leave the statement alone
                             modpost=suggest[ns]["statement"]+"\n"+modpost
-                        #new = chat_with_gpt()
-                        if checkmod :
+                        if checkmod : #useless as for now we print everything 
                             print(modpost)
                         new = chat_with_gpt(modpost)
-                        #new="new prompt"+str(max(suggest.keys()) + 1)
-                        # Now you can call the function with a prompt
-                        #suggest.append(new)
                         new_key = max(suggest.keys()) + 1
                         newstatements.append(new_key)
                         suggest[new_key] = {'statement': new, 'counter': 1}
+                        print("affter prompt: "+modpost)
                         print("new> "+str(new_key)+":"+new)
                     except Exception as e:
                         print("no news yet: "+str(ns))
@@ -264,7 +260,6 @@ def main():
                         time.sleep(10)
             if printImage:
                 if t % int(tstep/5) == 0:
-                #if t % int((K*mu*tstep+10)/5) == 0:
                     try: 
                         print("createimage")
                         url = create_image_url(suggest[max(suggest.keys())]['statement'])
