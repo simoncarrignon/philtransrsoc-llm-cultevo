@@ -5,7 +5,7 @@ pchs=20+1:length(sel_names)
 names(pchs)=sel_names
 
 library(syuzhet)
-for( model in c("GPT3.5","Mistral-7B-Instruct-v0.3")){
+for( model in c("GPT3.5","Mistral-7B-Instruct-v0.3","Qwen2.5-7B-Instruct")){
 for(pref in c("gennew","mut")){
 
     # Read the CSV file
