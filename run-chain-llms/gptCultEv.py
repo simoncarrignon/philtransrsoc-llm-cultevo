@@ -9,10 +9,6 @@ print("get connection")
 #client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 print("done")
 
-client = OpenAI(
-    base_url="http://localhost:8080/v1",  # "http://<Your api-server IP>:port"
-    api_key="sk-no-key-required"
-)
 
 import random
 import pickle
@@ -31,7 +27,7 @@ parser.add_argument('-mu', action="store", dest='mu', default=0.1)
 parser.add_argument('--mutate', action="store", dest='mutate', default=False)
 parser.add_argument('--image', action="store", dest='image', default=False)
 parser.add_argument('--checkmod', action="store", dest='checkmod', default=False)
-parser.add_argument('--agents', action="store", dest='nagents', default="20")
+parser.add_argument('--agents', action="store", dest='nagents', default="10")
 args = parser.parse_args()
 outdir=args.outdir
 K=int(args.K)
@@ -94,13 +90,20 @@ def checkind(ind,valid_indices):
         return None
 
 def chat_with_gpt(prompt):
+  client = OpenAI(
+            base_url="http://localhost:8080/v1",  # "http://<Your api-server IP>:port"
+            api_key="sk-no-key-required"
+            )
+  request_seed=random.randint(1,10000000000) 
   response = client.chat.completions.create(
-          model="Qwen/Qwen2.5-7B-GGUF",
-          messages=[ {"role": "user", "content": prompt} ],
+          model="Qwen/Qwen3-8B-GGUF",
+          messages=[ {"role": "user", "content": prompt+" /nothink"} ],
+          seed=request_seed,
           max_tokens=50
           )
         
   answer = response.choices[0].message.content
+  answer = re.sub(r'<think>.*?</think>', '', answer, flags=re.DOTALL).strip()
   return answer
 def read_from_file(fname):
     with open(fname, 'r') as file:
@@ -245,7 +248,7 @@ def main():
                             modpost=suggest[ns]["statement"]+"\n"+modpost
                         if checkmod : #useless as for now we print everything 
                             print(modpost)
-                        new = chat_with_gpt(modpost)
+                        new = chat_with_gpt(modpost+"\n\n Use only english.")
                         new_key = max(suggest.keys()) + 1
                         newstatements.append(new_key)
                         suggest[new_key] = {'statement': new, 'counter': 1}
