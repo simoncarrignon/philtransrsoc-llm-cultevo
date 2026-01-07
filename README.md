@@ -7,8 +7,6 @@ This is a fork of: https://github.com/simoncarrignon/llm-cult-evol
 
 The roject contains several scripts, prompts, and results related to language model exploration using Cultural Evolution model. The repository i split in two main component: chain-llms and abc, the first compotent allow to run chains of transmission with some models from OPENAI while the abc component allow to fit a model to the results of the chain
 
-Based on the file list provided, here is a structured overview of the project organization. The project appears to be a **Cultural Evolution simulation framework using Large Language Models (LLMs)**, designed to run iterative transmission chains, analyze the output, and model the results.
-
 ## Structure
 
 The project is divided into three parts:
