@@ -5,9 +5,10 @@ pchs=20+1:length(sel_names)
 names(pchs)=sel_names
 
 library(syuzhet)
-for( model in c("GPT3.5","Mistral-7B-Instruct-v0.3","Qwen2.5-7B-Instruct")){
+for( model in c("GPT3.5","Mistral-7B-Instruct-v0.3","Qwen2.5-7B-Instruct","Qwen2.5-7B-var1")){
 for(pref in c("gennew","mut")){
 
+    tryCatch({
     # Read the CSV file
     data <- read.csv(here::here("data",paste0(model,"_",pref,"_concatenated_files.csv")))
 
@@ -63,9 +64,12 @@ for(pref in c("gennew","mut")){
             print(paste0(model,test))
             try({
             exp=data[data$experience==test,]
-            plot(1,1,ylim=range(data[[var]]),xlim=c(0,101),type="n",ylab="Valence")
-            for(u in unique(exp$Statement)){
-                lines(exp[[var]][exp$Statement==u]~exp$Step[exp$Statement==u],col=colsel[unique(exp$Selection)])
+            plot(1,1,ylim=range(data[[var]]),xlim=c(0,101),type="n",ylab="Valence",xlab="")
+            for(u in unique(exp$ID)){
+                a=exp[[var]][exp$ID==u]
+                b=exp$Step[exp$ID==u]
+                col=colsel[unique(exp$Selection)]
+                lines(b,a,col=col)
             }
             if(unique(exp$Mutation)=="original")mtext(unique(exp$Selection),3,3,cex=1.5)
             if(unique(exp$Selection)=="efficient")mtext(unique(exp$Mutation),2,3,cex=1.5)
@@ -78,5 +82,8 @@ for(pref in c("gennew","mut")){
         dev.off()
     }
     print("done")
+    },error=function(e){
+        print(paste("combination",model,pref,"not found"))
+    })
 }
 }
