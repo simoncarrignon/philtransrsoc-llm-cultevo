@@ -1,7 +1,7 @@
-Code and Data for paper 
+Code and Data for paper "Quantifying the rate and amplitude of cultural change in populations of AI agents "
 ======================
 
-This is the repository for the paper "Quantifying the rate and amplitude of cultural change in populations of AI agents "
+This is the repository for the paper "Quantifying the rate and amplitude of cultural change in populations of AI agents" by Simon Carrignon, Alberto Acerbi and Joe Stubbersfield, sumitted to 'The evolution of sociality in hybrid human-AI populations' issue of Philosophical Transactions A .
 
 
 # Project Overview
