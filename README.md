@@ -249,6 +249,13 @@ def chat_with_gpt(prompt):
 # Approximate Bayesian Computation
 This part is stored in `script-analysis/abc` and is mainly written in R
 
+## Requirements
+
+You will need a few package to re-run these analysis
+
+
+- R packages: `parallel`, `here`, `hdrcde`.
+
 ## Model of Cultural Transmission
 
 
@@ -281,9 +288,6 @@ The script use to do so is `scripts-analysis/abc/abc_paper_small.R`
 
 This script performs Approximate Bayesian Computation (ABC) with Random Forest Adjustment (ABCRFA) to infer model parameters based on simulation metrics. The script leverages multiple R scripts and external CSV files to carry out the analysis. It allows for the reuse of pre-saved simulation priors or the generation of new priors if needed.
 
-### Requirements
-
-- R packages: `parallel`, `here`, `hdrcde`.
 
 ### Input
 
