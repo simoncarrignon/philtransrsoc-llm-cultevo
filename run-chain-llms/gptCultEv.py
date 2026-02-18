@@ -90,20 +90,29 @@ def checkind(ind,valid_indices):
         return None
 
 def chat_with_gpt(prompt):
-  client = OpenAI(
-            base_url="http://localhost:8080/v1",  # "http://<Your api-server IP>:port"
-            api_key="sk-no-key-required"
-            )
+  # When using custom LLM via llamacpp
+  #client = OpenAI(
+  #          base_url="http://localhost:8080/v1",  
+  #          api_key="sk-no-key-required"
+  #          )
+  #request_seed=random.randint(1,10000000000) 
+  #response = client.chat.completions.create(
+  #        model="Qwen/Qwen3-8B-GGUF",
+  #        messages=[ {"role": "user", "content": prompt+" /nothink"} ],
+  #        seed=request_seed,
+  #        max_tokens=50
+  #        )
+  #answer = re.sub(r'<think>.*?</think>', '', answer, flags=re.DOTALL).strip()
+  client = OpenAI( api_key=os.getenv('OPENAI_API_KEY'))
   request_seed=random.randint(1,10000000000) 
   response = client.chat.completions.create(
-          model="Qwen/Qwen3-8B-GGUF",
-          messages=[ {"role": "user", "content": prompt+" /nothink"} ],
+          model="gpt-3.5-turbo",
+          messages=[ {"role": "user", "content": prompt+""} ],
           seed=request_seed,
           max_tokens=50
           )
         
   answer = response.choices[0].message.content
-  answer = re.sub(r'<think>.*?</think>', '', answer, flags=re.DOTALL).strip()
   return answer
 def read_from_file(fname):
     with open(fname, 'r') as file:
