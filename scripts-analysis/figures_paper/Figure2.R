@@ -20,7 +20,7 @@ colsid=c("#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","
 names(colsid)=as.character(ids)
 
 
-png("example.png",height=700,width=900,pointsize=17)
+png("Figure1a.png",height=700,width=900,pointsize=17)
 par(mar=c(4,4,1,1),cex=1.2)
 plot(1,1,ylim=range(data[["Count"]])*1.02,xlim=c(0,15),type="n",ylab="Number of Time Selected",xlab="Step")
 for(u in ids){

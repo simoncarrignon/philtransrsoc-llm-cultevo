@@ -1,119 +1,63 @@
-#' a function to plot the distribution of utility as a heatmpa
-#' @param datafreq the result of function model, a list with one datframe in $freq and a vctor of utility in $ut
-#' @export
-heatmap_utility <- function(datafreq,pal=hcl.colors(256,"Zissou 1",rev=F),axis=F,...){
-    us=sort(unique(round(datafreq$ut,1)))
-    frq=datafreq$freq
-    hm=sapply(us,function(u)apply(frq[ round(datafreq$ut,1)==u,,drop=F],2,sum))
-    image(log(hm),col=pal,xlab="time",ylab="utility",xaxt="n",yaxt="n",...)
-    if(axis)axis(2,at=seq(0,1,length.out=5),label=round(seq(min(us),max(us),length.out=5)))
-    if(axis)axis(1,at=seq(0,1,length.out=5),label=round(seq(1,ncol(frq)-1,length.out=5)))
-    return(hm)
+sel_names <- mut_names <- c("original","efficient","attractive","random")
+cols=palette.colors(n=length(mut_names),palette="Set 1")
+cols <- scales::hue_pal()(length(mut_names))  
+names(cols)=sort(mut_names)
+pchs=20+1:length(sel_names) 
+names(pchs)=sel_names
+
+allrep=list(rep01=readRDS(here::here("scripts-analysis/abc/output/list_allposteriors_rep00.RDS")),
+rep02=readRDS(here::here("scripts-analysis/abc/output/list_allposteriors_rep01.RDS")))
+allmodes=do.call("rbind",lapply(allrep[[1]],function(i)do.call("rbind",i$allmodes)))
+allmodes2=do.call("rbind",lapply(allrep[[2]][-5],function(i)do.call("rbind",i$allmodes)))
+allmodes=rbind(allmodes2,allmodes)
+expnames=do.call("rbind",strsplit(rownames(allmodes),"_"))
+
+models=unique(unname(unlist(sapply(allrep,names,USE.NAMES = F))))
+
+names(models)=c(
+  "Mistral 7B",
+  "Qwen2.5 7B",
+  "Qwen2.5 7B",
+  "OpenAI ChatGPT3.5",
+  "Qwen3 8B")
+
+png("Figure3.png",width=2400,height=1000,pointsize=17)
+par(mfrow=c(2,3),mar=c(4,4,2,1),cex=1.1,oma=c(0,3,0,7))
+for(mi in names(models)[-c(5,3)][c(1,3,2)]){
+    m=models[mi]
+    m_allmodes <- do.call("rbind",allrep[[2]][[m]]$allmodes)
+    colnames(m_allmodes) <- c("J","beta")
+    expnames <- do.call("rbind",strsplit(rownames(m_allmodes),"_"))
+    colnames(expnames) <- c("Mutation","Selection")
+    m_allmodes <- cbind.data.frame(m_allmodes,apply(expnames,2,as.factor))
+    m_allmodes$Selection  <-  as.factor(m_allmodes$Selection)
+    m_allmodes$Mutation  <-  as.factor(m_allmodes$Mutation)
+    plot(1,type="n",xaxt="n",pch=20,ylim=c(0,2.5),ylab=expression(J),xlim=c(.7,4.3),main='',xlab="Selection")
+    mtext(mi,side=3,line=.5,adj=0,font=2,cex=1.1)
+    grid(lty=1,nx=0)
+    abline(v=1:4,col=adjustcolor("grey",.6))
+    abline(h=0:7,col=adjustcolor("grey",.6))
+    for(sel in unique(m_allmodes$Mutation)) lines(m_allmodes[m_allmodes$Mutation == sel ,1],type="o",pch=20,col=cols[sel],lwd=4)
+    axis(1,at=1:4,label=levels(m_allmodes$Selection))
 }
+legend("topright", inset = c(-0.25, 0), pch = 20, lwd = 4, col = cols, legend = names(cols), title = "Mutation", bty = "n", xpd = NA)
 
-
-
-source("../scripts-analysis/abc/R/model-slots.R")
-
-m=10
-tstep=100
-N=100
-p0=rep(N/m,m)
-u0="rnorm"
-mu=.1
-
-model.slot(p0=p0,J=1,u0=u0,beta=1,sde=1,tstep=tstep,e=10,mu=mu,N=N,m=m,mutate=T,log=F,K=50,useslots=T)
-
-allparam=list(c(0,1.2),c(1.2,1.2),c(0,0),c(1.2,0))
-par(mfrow=c(2,2),mar=c(.5,.5,.5,.5),oma=c(4,2,2,.5))
-for( jb in allparam){
-    plot(1,1,ann=F,axes=F,type="n")
-    rect( par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "black")
-    par(new=T)
-    heatmap_utility(model.slot(p0=p0,J=jb[1],u0=u0,beta=jb[2],sde=1,tstep=tstep,e=1,mu=mu/2,N=N,m=m,mutate=T,log=F,K=50,useslots=T),ann=F,axes=F,pal=viridis::magma(256))
-    if(jb[2]==0)(axis(1,label=pretty(seq(1,100,length.out=5)),at=pretty(seq(0,1,length.out=5))))
-    box()
+for(mi in names(models)[-c(5,3)][c(1,3,2)]){
+    m=models[mi]
+    m_allmodes <- do.call("rbind",allrep[[2]][[m]]$allmodes)
+    colnames(m_allmodes) <- c("J","beta")
+    expnames <- do.call("rbind",strsplit(rownames(m_allmodes),"_"))
+    colnames(expnames) <- c("Mutation","Selection")
+    m_allmodes <- cbind.data.frame(m_allmodes,apply(expnames,2,as.factor))
+    m_allmodes$Selection  <-  as.factor(m_allmodes$Selection)
+    m_allmodes$Mutation  <-  as.factor(m_allmodes$Mutation)
+    plot(1,type="n",xaxt="n",pch=20,col=cols["original"],ylim=c(0,2.5),ylab=expression(beta),xlim=c(.7,4.3),main='',xlab="Selection")
+    mtext(mi,side=3,line=.5,adj=0,font=2,cex=1.1)
+    grid(lty=1,nx=0)
+    abline(v=1:4,col=adjustcolor("grey",.6))
+    abline(h=0:7,col=adjustcolor("grey",.6))
+    for(sel in unique(m_allmodes$Mutation)) lines(m_allmodes[m_allmodes$Mutation == sel ,2],type="o",pch=20,col=cols[sel],lwd=4)
+    axis(1,at=1:4,label=levels(m_allmodes$Selection))
 }
-mtext("J=0",3,.5,0.25,outer=T)
-mtext("J=1.2",3,.5,0.75,outer=T)
-mtext(expression(beta==0),2,.5,0.25,outer=T)
-mtext(expression(beta==1.2),2,.5,0.75,outer=T)
-mtext("time",1,2,0.25,outer=T)
-mtext("time",1,2,0.75,outer=T)
-
-
-pref="gennew"
-# Read the CSV file output of the all chains fr this model
-data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files.csv")))
-data  <- data[data$Mutation == mut & data$Selection == sel,]
-
-
-ids=unique(data$ID[data$Step < 15])
-colsid=adjustcolor(rainbow(length(ids)))
-names(colsid)=as.character(ids)
-
-    heatmap_utility(model.slot(p0=p0,J=jb[1],u0=u0,beta=jb[2],sde=1,tstep=tstep,e=1,mu=mu/2,N=N,m=m,mutate=T,log=F,K=50,useslots=T),ann=F,axes=F,pal=viridis::magma(256))
-
-mutations="original"#c("random","efficient")
-par(mfrow=c(3,2),mar=c(.5,.5,.5,.5),oma=c(4,2,2,.5))
-m="Mistral-7B-Instruct-v0.3"
-pref="mut"
-for(mut in mutations){
-	for(sel in mutations){
-
-
-			data <- read.csv(here::here("chain-output","merged-csvs",paste0(m,"_",pref,"_concatenated_files.csv")))
-		data  <- data[data$Mutation == mut & data$Selection == sel,]
-		data  <- data[data$Step < 50,]
-aa=list()
-aa$freq=xtabs(Count ~ ID + Step, data[,c("ID","Count","Step")])
-aa$ut = 1:nrow(aa$freq)
-
-
-				plot(1,1,ann=F,axes=F,type="n")
-				rect( par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "black")
-				par(new=T)
-				heatmap_utility(aa,ann=F,axes=F,pal=viridis::magma(256))
-				if(mut=="efficient")(axis(1,label=pretty(seq(1,50,length.out=5)),at=pretty(seq(0,1,length.out=5))))
-				box()
-	}
-}
-mtext("Selection Random",3,.5,0.25,outer=T)
-mtext("Selection Efficient",3,.5,0.75,outer=T)
-mtext("Mutation Efficient",2,.5,0.25,outer=T)
-mtext("Mutation Random",2,.5,0.75,outer=T)
-mtext("time",1,2,0.25,outer=T)
-mtext("time",1,2,0.75,outer=T)
-
-mutations="original"#c("random","efficient")
-selection=c("random","efficient")
-par(mfrow=c(3,2),mar=c(.5,.5,.5,.5),oma=c(4,2,2,.5))
-models=c("Mistral-7B-Instruct-v0.3","GPT3.5","Qwen2.5-7B-Instruct")
-pref="mut"
-for(m in models){
-	for(sel in selection){
-
-
-			data <- read.csv(here::here("chain-output","merged-csvs",paste0(m,"_",pref,"_concatenated_files.csv")))
-		data  <- data[data$Mutation == mut & data$Selection == sel,]
-		data  <- data[data$Step < 50,]
-aa=list()
-aa$freq=xtabs(Count ~ ID + Step, data[,c("ID","Count","Step")])
-aa$ut = 1:nrow(aa$freq)
-
-
-				plot(1,1,ann=F,axes=F,type="n")
-				rect( par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "black")
-				par(new=T)
-				heatmap_utility(aa,ann=F,axes=F,pal=viridis::magma(256))
-				if(mut=="efficient")(axis(1,label=pretty(seq(1,50,length.out=5)),at=pretty(seq(0,1,length.out=5))))
-				box()
-	}
-}
-mtext("Selection Random",3,.5,0.25,outer=T)
-mtext("Selection Efficient",3,.5,0.75,outer=T)
-mtext("Qwen",2,.5,0.15,outer=T)
-mtext("GPT3.5",2,.5,0.5,outer=T)
-mtext("Mistral 7B",2,.5,0.85,outer=T)
-mtext("time",1,2,0.25,outer=T)
-mtext("time",1,2,0.75,outer=T)
+legend("topright", inset = c(-0.25, 0), pch = 20, lwd = 4, col = cols, legend = names(cols), title = "Mutation", bty = "n", xpd = NA)
+dev.off()
