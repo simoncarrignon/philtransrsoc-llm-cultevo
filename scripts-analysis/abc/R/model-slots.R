@@ -128,3 +128,19 @@ model.slot <- function(p0,J,u0,unit=NULL,beta,sde,tstep,mu,N,m,prob=p,mutate=TRU
 }
 
 
+#' probability model (from Vidiella et all 2023)
+#' 
+#' @param p_t: a vector of frequencies at time t
+#' @param J: an integer quantifying the weight of those freqnecies (if <-1 : anticonformist bias, if 0 neutral, if >1 conformist) 
+#' @param u: a list of utility or function to comput utility of cultural traits (same size that p_t)
+#' @param beta:  transparancy
+#' @param sde: standard deviation of error in estimating the utilitoes
+#' @return: a vector of same size that p_t and u with the frequencies at time t+1
+
+p <- function(p_t, J, u, beta, sde){
+  eps <- `if`(sde > 0, rnorm(length(p_t), mean = 0, sd = sde), 0)
+  p <- p_t^J * exp(beta*u + eps)
+  p_t <- p / sum(p)
+  return(replace(p_t, is.na(p_t), 1/sum(is.na(p_t)))) #this is problematic for very high J and beta 
+}
+
