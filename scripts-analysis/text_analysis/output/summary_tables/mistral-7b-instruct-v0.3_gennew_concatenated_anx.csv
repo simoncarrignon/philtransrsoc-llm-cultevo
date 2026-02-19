@@ -1,0 +1,17 @@
+Mutation,Selection,average
+attractive,attractive,0.001309807419264697
+attractive,efficient,0.003921100138820555
+attractive,original,0.0026546870577096628
+attractive,random,0.0013329335592024293
+efficient,attractive,0.007509879995377466
+efficient,efficient,0.020576859722152743
+efficient,original,0.010338597247335992
+efficient,random,0.016006240345897812
+original,attractive,0.0010862367473147192
+original,efficient,9.77839089098198e-4
+original,original,3.108756555415587e-4
+original,random,1.5255881626834186e-4
+random,attractive,0.0014531040518815238
+random,efficient,4.1138174589359276e-4
+random,original,0.005312754572064992
+random,random,0.0017812714309149089

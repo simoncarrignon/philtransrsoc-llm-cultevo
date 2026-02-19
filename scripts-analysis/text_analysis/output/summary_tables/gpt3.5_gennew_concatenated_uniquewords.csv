@@ -1,0 +1,17 @@
+Mutation,Selection,N
+original,efficient,728
+original,attractive,749
+original,original,772
+original,random,739
+efficient,efficient,333
+efficient,attractive,336
+efficient,original,346
+efficient,random,347
+random,efficient,443
+random,attractive,424
+random,original,424
+random,random,430
+attractive,efficient,466
+attractive,attractive,359
+attractive,original,451
+attractive,random,480
