@@ -3,7 +3,7 @@ sel <- "original"
 model= "Qwen2.5-7B-Instruct"
 pref <- "gennew"
 # Read the CSV file output of the all chains fr this model
-data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files.csv")))
+data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files_0.csv")))
 data  <- data[data$Mutation == mut & data$Selection == sel,]
 
 liststat <- data[data$Step < 15 ,]  #statement before 15 steps
@@ -49,6 +49,7 @@ kable(liststat, format = "html", row.names = FALSE) |>
 
 
 
+### not used in paper
 
 ### Temporal change: whole simulation
 ids=unique(data$ID)
