@@ -1,6 +1,9 @@
 Code and Data for paper "Quantifying the rate and amplitude of cultural change in populations of AI agents "
 ======================
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18704521.svg)](https://doi.org/10.5281/zenodo.18704521)
+
+
 This is the repository for the paper "Quantifying the rate and amplitude of cultural change in populations of AI agents" by Simon Carrignon, Alberto Acerbi and Joe Stubbersfield, sumitted to 'The evolution of sociality in hybrid human-AI populations' issue of Philosophical Transactions A .
 
 
