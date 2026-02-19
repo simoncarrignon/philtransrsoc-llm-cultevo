@@ -70,10 +70,12 @@ This section is split in three main folder: `abc/`, `text_analysis` and `figures
 
 The following part explain more in details how to run the different aspect of the project:
 
-# Chain transmission with OPEN AI models
+# Details description of the different parts
+
+## Chain transmission with OPEN AI models
 
 
-## Using the docker:
+### Using the docker:
 
 A dockerfile is provided to run the expeiremnt, which allow to easily re-run it regardless of the hardware or software you have.
 
@@ -86,7 +88,7 @@ On linux, don't forget to add yourself to the docker group if you don'twant to h
    sudo usermod -aG docker $USER
 ```
 
-### Build and run the docker
+#### Build and run the docker
 
 To build the docker
 
@@ -111,7 +113,7 @@ docker run --rm  -v ./results:/usr/src/app/results --env OPENAI_API_KEY=$OPENAI_
 
 Where is -v is used to link the output folder within the docker with a local folder
 
-## Using python virtual environment
+### Using python virtual environment
 
 This has been lastly tested with Python 3.13.5. If you have a different version, the package listed in requirement.tx may need to be adjust. We suggest you to install the same version of python using pyenv.
 
@@ -130,7 +132,9 @@ pip install -r requirements.txt
 python3 gptCultEv.py -N 20 -t 10 -k 5 --statements statements.txt --modprompt prompts/generatenew_random_health.prompt --selprompt prompts/select_random.prompt --outdir "results/"
 ```
 
-Once the experiment is done two files are create: `alltstepbeta.pkl` & `variantsbeta.pkl`
+## Run and analyses chains
+
+Regadless of how your run the chain, when the experiment is done two files are create: `alltstepbeta.pkl` & `variantsbeta.pkl`
 They store informaiton about the variants seleted through time and the satetment generated. They can be exctracted using:
 
 ```bash
@@ -142,12 +146,15 @@ python3 extract_all.py --outdir results
 - `toCSV.py` creates a csv with how many  agents have choose each traits ; one row per time step and one column per statement 
 - `extract_all.py` also write a csv but with the full  statements along with their counts per time step.
 
+### Automatic epxloration of combination of ooperators
+
+Note: we original duplicate all operator using a "mutate" and "generate from new" operators. As we could only run all needed combination with chat GPT for funding limit, and as the results for all the other model between both variate are pretty similar, we decided in the papaer to only discuss the generate from new operatore. In the exploration you will still find code to run and anlysis both.
 
 Two bash scripts wrappers are available to automatize the exploration of different selection vs mutation prompt and are provided in the folder
 - `lastautoExplor.sh`
 - `process_simulation.sh`
 
-You will need to start with the first, that will automatically combine the type of prompt need
+You will need to start with the first script, that will automatically combine the type of prompt needed to generate all chains:
 
 ```bash
 bash lastautoExplor.sh
@@ -161,10 +168,10 @@ bash process_simulation.sh
 
 This second step will automtically extract the data from the pickled object and concate
 
-# Chain transmission with other models:
+## Chain transmission with other models:
 
 
-## llamacpp 
+### llamacpp 
 To run the chain transmission with other models we used [llamacpp](https://llama-cpp.com/) to run open source model locally. 
 
 Following the isntruction  [here](https://llama-cpp.com/download/)  to download llama-cpp, you can then automatically run model from hugging face (not that you will need an API key from hugging face)
@@ -179,7 +186,7 @@ wget https://github.com/ggml-org/llama.cpp/releases/download/b6697/llama-b6697-b
 where `${HF_TOKEN}` is Hugging Face token to download the model
 
 
-## Adjust `gptCultEv.py`
+### Adjust `gptCultEv.py`
 In `gptCultEv.py`, replace open AI client by localhost server:
 
 ```python
@@ -246,17 +253,17 @@ def chat_with_gpt(prompt):
   answer = response.choices[0].message.content
 ```
 
-# Approximate Bayesian Computation
+## Approximate Bayesian Computation
 This part is stored in `script-analysis/abc` and is mainly written in R
 
-## Requirements
+### Requirements
 
 You will need a few package to re-run these analysis
 
 
 - R packages: `parallel`, `here`, `hdrcde`.
 
-## Model of Cultural Transmission
+### Model of Cultural Transmission
 
 
 The theoreticla model used to try to epxlain the chains is  inspired by: https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0570 and others
@@ -280,7 +287,7 @@ heatmap_utility(res)
 
 The model here is only used during the abc.
 
-## ABC rejection + Random Forest
+### ABC rejection + Random Forest
 
 This whole ABC is done in one single script that assume  that the chain resuls are load from the concatenated CSV.
 
@@ -289,13 +296,13 @@ The script use to do so is `scripts-analysis/abc/abc_paper_small.R`
 This script performs Approximate Bayesian Computation (ABC) with Random Forest Adjustment (ABCRFA) to infer model parameters based on simulation metrics. The script leverages multiple R scripts and external CSV files to carry out the analysis. It allows for the reuse of pre-saved simulation priors or the generation of new priors if needed.
 
 
-### Input
+A. Input
 
 - Two command line arguments are required:
   1. `outdir`: Directory where the output of ABC will be saved.
   2. `experiment`: Directory where the `concatenated_files.csv` are stored.
 
-### Script Details
+B. Script Details
 
 1. **Setup and Initialization**:
     - Read command-line arguments to determine output directory and experiment data location.
@@ -321,10 +328,11 @@ This script performs Approximate Bayesian Computation (ABC) with Random Forest A
 6. **Error Handling**:
     - The script includes error handling to manage missing files and simulation errors (ie parameters that yield weird simulation etc...)
 
-### Output
+C. Output
 
 - The script generates multiple `.RDS` files containing:
-  - Prior configurations, augmented as needed.
+  - Prior configurations
   - Simulation results and computed metrics.
   - ABC-RFA models and posterior distributions.
 
+The RDS used to generate the figure in the paper are provide in `abc/output` the simulations used to run the ABC are also provided in their entirety as a tar ball on the zenodo repository
