@@ -150,9 +150,9 @@ python3 extract_all.py --outdir results
 
 ### Automatic exploration of combination of operators
 
-Note: we original duplicate all operator using a "mutate" and "generate from new" operators. As we could only run all needed combination with chat GPT for funding limit, and as the results for all the other model between both variate are pretty similar, we decided in the paper to only discuss the generate from new operators. In the exploration you will still find code to run and analysis both.
+Note: we originally duplicated all operator using a "mutate" and "generate from new" operators. As we could only run all needed combination with chat GPT for funding limit, and as the results for all the other model between both variate are pretty similar, we decided in the paper to only discuss the generate from new operators. In the exploration you will still find code to run and analysis both.
 
-Two bash scripts wrappers are available to automatize the exploration of different selection vs mutation prompt and are provided in the folder
+Two bash scripts wrappers are available to automatize the exploration of different selection vs mutation prompt and are provided in the folder `run-chain-llms/`. These script haven't been tested with the docker wo you will want to modify these if you want to use the docker.
 - `lastautoExplor.sh`
 - `process_simulation.sh`
 

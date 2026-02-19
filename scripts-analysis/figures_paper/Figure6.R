@@ -8,7 +8,7 @@ models<-c("Mistral 7B"= "mistral-7b-instruct-v0.3_generate_new_statements","Qwen
 
 
 metrics <- c("uniquewords")
-png("Figure6.png",width=2400,height=500,pointsize=17)
+png("Figure6.png",width=2400,height=800,pointsize=17)
 par(mfrow=c(1,3),mar=c(4,4,2,1),cex=1.1,oma=c(0,0,0,7),cex=1.2)
 for(mi in names(models)[-c(5,3)][c(1,3,2)]){
 for(me in metrics){
