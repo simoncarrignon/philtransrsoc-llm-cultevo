@@ -47,7 +47,9 @@ with open(output_file_path, "w") as output_file:
                     inprompt_count = counts.get(stat_index,0)
                 else:
                     inprompt_count = 'NA'
-                sanitized_statement = statement.replace('"', "'")  # Remove any existing quotes
+                s = statement.replace("\r\n", "\n").replace("\r", "\n")
+                s = s.replace("\n", r"\n") # swap endlines within statments with character
+                sanitized_statement = s.replace('"', "'")  # Remove any existing quotes
                 # Write step index, value, and sanitized statement to the file
                 output_file.write(f'{step_index},{stat_index},{stat_value},{inprompt_count},"{sanitized_statement}"\n')
 
