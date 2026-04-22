@@ -242,8 +242,7 @@ Step,ID,Count,InPromptCount,Statement
 36,188,1,2,"'Eat well, be well. A balanced diet promotes health.'"
 36,189,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
 37,76,100,45,"'Eat well, feel better. A balanced diet boosts energy, mood, and overall health.'"
-37,190,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+37,190,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 37,191,1,1,"'Eat wisely for better health.'"
 37,192,1,1,"'A balanced diet promotes well-being and good health. Choose wisely.'"
 37,193,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
@@ -363,8 +362,7 @@ Step,ID,Count,InPromptCount,Statement
 55,76,100,45,"'Eat well, feel better. A balanced diet boosts energy, mood, and overall health.'"
 55,280,1,1,"'A balanced diet promotes well-being and good health.'"
 55,281,1,1,"'Eating well fuels your body, boosting energy and mood.'"
-55,282,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+55,282,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 55,283,1,1,"'Eat well, be well. A balanced diet promotes health.'"
 55,284,1,1,"'Eat wisely for better health.'"
 56,76,100,42,"'Eat well, feel better. A balanced diet boosts energy, mood, and overall health.'"

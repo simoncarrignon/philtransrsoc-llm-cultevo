@@ -223,8 +223,7 @@ Step,ID,Count,InPromptCount,Statement
 32,161,65,25,"'A balanced diet and regular exercise boost well-being and reduce health risks.'"
 32,165,1,1,"'A healthy diet boosts well-being and reduces illness. Choose wisely.'"
 32,166,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
-32,167,1,3,"Eating a balanced, healthy diet boosts well-being and overall health.ighet
-"
+32,167,1,3,"Eating a balanced, healthy diet boosts well-being and overall health.ighet\n"
 32,168,1,3,"'Eat well, feel better. A balanced diet equals better health.'"
 32,169,1,1,"'Eating well fuels your body, boosting energy and overall health.'"
 33,129,100,41,"'Eat well, be well. A balanced diet promotes health.'"
@@ -582,8 +581,7 @@ Step,ID,Count,InPromptCount,Statement
 81,410,1,1,"'A healthy diet boosts well-being and promotes good health.'"
 81,411,1,1,"'Eat well, be well. A healthy diet fuels your body and mind.'"
 81,412,1,1,"'Eat well, be well. A balanced diet promotes health and happiness.'"
-81,413,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+81,413,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 81,414,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
 82,375,17,10,"'A healthy diet boosts well-being and prevents diseases; small, smart choices matter.'"
 82,410,21,9,"'A healthy diet boosts well-being and promotes good health.'"
@@ -657,8 +655,7 @@ Step,ID,Count,InPromptCount,Statement
 91,460,1,2,"'Eating well fuels your body, boosting energy and health.'"
 91,461,1,1,"'Eat well, feel better. A balanced diet promotes health and happiness.'"
 91,462,1,2,"'A balanced diet promotes well-being and good health.'"
-91,463,1,2,"Eating a balanced, healthy diet boosts well-being and overall health.ighet
-"
+91,463,1,2,"Eating a balanced, healthy diet boosts well-being and overall health.ighet\n"
 91,464,1,2,"'Eating well fuels your body, enhancing energy and well-being.'"
 92,423,91,37,"'Eat well, be well. A balanced, nutritious diet fuels your body and boosts your health.'"
 92,455,7,1,"'Eat well, be well. A healthy diet leads to a healthier life.'"

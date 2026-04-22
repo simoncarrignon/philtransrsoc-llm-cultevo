@@ -264,8 +264,7 @@ Step,ID,Count,InPromptCount,Statement
 35,183,1,1,"'Eat well, be well. A balanced diet promotes health.'"
 35,184,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
 36,172,100,43,"'Eat well, be well. A balanced diet equals balanced life.'"
-36,185,1,1,"Eating a balanced, healthy diet promotes well-being and good health.ighet
-"
+36,185,1,1,"Eating a balanced, healthy diet promotes well-being and good health.ighet\n"
 36,186,1,1,"'Eat wisely for better health.'"
 36,187,1,1,"'Eat well, be well. A healthy diet equals better health.'"
 36,188,1,3,"'Eat well, be well. A balanced diet equals balanced life.'"

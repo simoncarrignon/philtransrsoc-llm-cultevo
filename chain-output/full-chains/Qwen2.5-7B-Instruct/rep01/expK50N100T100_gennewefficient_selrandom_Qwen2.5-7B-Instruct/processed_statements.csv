@@ -18,8 +18,7 @@ Step,ID,Count,InPromptCount,Statement
 1,10,1,4,"'A balanced diet promotes well-being and good health.'"
 1,11,1,1,"'Choose a balanced diet for better health and well-being.'"
 1,12,1,1,"'Eat well, be well. A balanced diet promotes health.'"
-1,13,1,2,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+1,13,1,2,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 1,14,1,4,"'A healthy diet improves well-being and reduces illness; start today!'"
 2,0,2,1,"Incorporating a variety of fruits and vegetables into your meals ensures you receive a spectrum of vitamins and minerals, vital for boosting immunity and enhancing your energy levels, contributing to an overall healthier you."
 2,4,98,43,"Incorporating moderate, regular physical activity alongside a diet rich in vegetables, fruits, and whole grains can dramatically improve your physical and mental health, leading to a more active and fulfilling life."

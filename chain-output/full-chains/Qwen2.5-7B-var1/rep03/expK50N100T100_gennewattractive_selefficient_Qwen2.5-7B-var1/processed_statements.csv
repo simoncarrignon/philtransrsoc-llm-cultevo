@@ -537,9 +537,7 @@ Step,ID,Count,InPromptCount,Statement
 70,354,3,3,"'Eat well, be well. Choose foods that fuel your body and soul for a life full of joy and health!'"
 70,355,1,1,"'Eat well, feel well. Small changes in your diet can lead to big differences in your life!'"
 70,356,1,1,"'Eat well, be well. Small changes in your diet can create big differences in your life!'"
-70,357,1,2,"'Elevate your well-being with mindful choices:滋养身体，从健康饮食开始。' 
-
-(For a truly short and engaging English version, consider: 'Nourish yourself with good choices.')"
+70,357,1,2,"'Elevate your well-being with mindful choices:滋养身体，从健康饮食开始。' \n\n(For a truly short and engaging English version, consider: 'Nourish yourself with good choices.')"
 70,358,1,2,"'Eat well, be well. Choose foods that fuel your body and soul for a life full of joy and vitality!'"
 70,359,1,1,"'Eat clean, feel great, live healthier—small changes, big impacts!'"
 71,297,100,42,"Eating a balanced diet filled with fruits, veggies, and lean proteins can boost your well-being and keep you feeling great! Share your favorite healthy recipes or tips below! 🌟"

@@ -387,8 +387,7 @@ Step,ID,Count,InPromptCount,Statement
 52,250,37,22,"'A healthy diet boosts well-being, improves health, and saves money.'"
 52,264,63,22,"'A balanced diet promotes well-being and good health.'"
 52,265,1,1,"A healthy diet boosts well-being and good health; choose wisely."
-52,266,1,1,"A balanced diet leads to better health and well-being.ighet
-"
+52,266,1,1,"A balanced diet leads to better health and well-being.ighet\n"
 52,267,1,2,"A healthy diet leads to better well-being and reduces health risks. Try it!"
 52,268,1,1,"A healthy diet boosts well-being and overall health. Try it!"
 52,269,1,1,"A balanced diet promotes well-being and good health; choose wisely."
@@ -491,8 +490,7 @@ Step,ID,Count,InPromptCount,Statement
 65,331,1,1,"'A balanced diet boosts well-being; choose healthier options.'"
 65,332,1,2,"'A balanced diet improves well-being and health.'"
 65,333,1,1,"'A balanced diet promotes well-being and good health.'"
-65,334,1,1,"A healthy diet improves well-being and overall health.ighet
-"
+65,334,1,1,"A healthy diet improves well-being and overall health.ighet\n"
 66,329,98,43,"Eating a balanced, healthy diet improves well-being and overall health."
 66,332,2,1,"'A balanced diet improves well-being and health.'"
 66,335,1,1,"A healthy diet boosts well-being and overall health. Try it!"
@@ -575,8 +573,7 @@ Step,ID,Count,InPromptCount,Statement
 76,368,95,40,"A healthy diet boosts well-being and overall health. Try it!"
 76,383,4,4,"A healthy diet improves well-being and reduces illness; choose wisely."
 76,384,1,0,"A balanced diet improves well-being and health."
-76,385,1,1,"A healthy diet improves well-being and reduces disease risk.ighet
-"
+76,385,1,1,"A healthy diet improves well-being and reduces disease risk.ighet\n"
 76,386,1,1,"'A balanced diet boosts well-being; choose nutritious foods for optimal health.'"
 76,387,1,1,"'A balanced diet boosts well-being and good health.'"
 76,388,1,2,"Eating a balanced, healthy diet improves well-being and overall health."

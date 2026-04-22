@@ -359,16 +359,14 @@ Step,ID,Count,InPromptCount,Statement
 47,243,1,1,"'Eat well, be well. A balanced diet promotes health and happiness.'"
 47,244,1,3,"'Eating a balanced, healthy diet promotes well-being and good health.'"
 48,233,100,43,"'Eat well, be well. A balanced diet equals balanced life.'"
-48,245,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+48,245,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 48,246,1,1,"'A balanced diet promotes well-being and good health.'"
 48,247,1,1,"'Eat well, be well. A balanced diet promotes health and happiness.'"
 48,248,1,1,"'Eat well, feel better. A healthy diet equals good health.'"
 48,249,1,3,"'A healthy diet improves well-being and reduces illness. Start today!'"
 49,247,88,39,"'Eat well, be well. A balanced diet promotes health and happiness.'"
 49,249,12,3,"'A healthy diet improves well-being and reduces illness. Start today!'"
-49,250,1,1,"Eating well fuels your body, boosting energy and health.ighet
-"
+49,250,1,1,"Eating well fuels your body, boosting energy and health.ighet\n"
 49,251,1,2,"'Eat well, be well. A balanced diet promotes health and happiness.'"
 49,252,1,2,"Eating a healthy diet keeps you fit and happy; invest in your well-being today."
 49,253,1,2,"'Enjoy your food, but choose wisely for better health.'"
@@ -666,8 +664,7 @@ Step,ID,Count,InPromptCount,Statement
 87,436,34,13,"'A healthy diet boosts well-being, enhancing energy and mood. Start today!'"
 87,438,1,1,"'Eating a balanced, healthy diet improves well-being and overall health.'"
 87,440,1,2,"'Eating a balanced, healthy diet improves well-being and overall health.'"
-87,441,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+87,441,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 87,442,1,1,"'Eat well, be well. A healthy diet equals better health.'"
 87,443,1,4,"'Eat well, be well. A balanced diet equals balanced life.'"
 87,444,1,1,"'Eat well, feel better. A healthy diet equals good health.'"

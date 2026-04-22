@@ -320,9 +320,7 @@ Step,ID,Count,InPromptCount,Statement
 19,101,1,3," 'Nourish your body, mind, and health with a healthy diet.'"
 19,102,1,1," Choose health by eating whole, avoiding processed & sugars. Clear mind, better sleep, better health."
 19,103,1,2," Healthy diet enhances well-being, boosts mental clarity, improves sleep, and promotes overall wellness. Choose whole, fresh foods and cut back on processed foods & sugars."
-19,104,1,1," Healthy diet = clear mind, good sleep, well-being.
-
-Cut processed, sugars."
+19,104,1,1," Healthy diet = clear mind, good sleep, well-being.\n\nCut processed, sugars."
 20,18,24,9," Adopt a plant-based diet for optimal health. Rich in legumes, nuts, seeds, whole grains, and more. Lower risk of chronic diseases, improved digestion and metabolism."
 20,34,5,0," Eating fresh, whole foods and cutting back on processed foods & sugars boosts mental clarity, improves sleep, and promotes overall well-being."
 20,54,30,14," Eating fresh, whole foods and cutting back on processed foods & sugars boosts mental clarity, improves sleep, and promotes overall health."
@@ -335,9 +333,7 @@ Cut processed, sugars."
 20,99,3,2," 'Healthy diet for a clear mind, better sleep, and better health. Choose health today.'"
 20,101,2,1," 'Nourish your body, mind, and health with a healthy diet.'"
 20,103,3,2," Healthy diet enhances well-being, boosts mental clarity, improves sleep, and promotes overall wellness. Choose whole, fresh foods and cut back on processed foods & sugars."
-20,104,8,0," Healthy diet = clear mind, good sleep, well-being.
-
-Cut processed, sugars."
+20,104,8,0," Healthy diet = clear mind, good sleep, well-being.\n\nCut processed, sugars."
 20,105,1,3," Eating fresh, whole foods and cutting back on processed foods & sugars promotes clearer thinking, better sleep, and better overall health."
 20,106,1,1," Eating whole, avoiding processed & sugars is key to a clear mind, better sleep, and better health. Choose well-being!"
 20,107,1,1," Eating fresh, whole foods and cutting back on processed foods & sugars can boost mental clarity, improve sleep, and promote overall health."

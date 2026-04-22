@@ -617,8 +617,7 @@ Step,ID,Count,InPromptCount,Statement
 84,424,5,1,"A healthy diet improves well-being and reduces illness; choose wisely."
 84,425,1,1,"A balanced diet boosts well-being and health."
 84,426,1,2,"Eating a balanced, healthy diet improves well-being and overall health."
-84,427,1,2,"A healthy diet boosts well-being and overall health.ighet
-"
+84,427,1,2,"A healthy diet boosts well-being and overall health.ighet\n"
 84,428,1,1,"'A balanced diet boosts well-being; choose nutritious foods for better health.'"
 84,429,1,1,"'A balanced diet promotes well-being and good health.'"
 85,420,100,43,"'A healthy diet boosts well-being; choose nutritious foods for better health.'"

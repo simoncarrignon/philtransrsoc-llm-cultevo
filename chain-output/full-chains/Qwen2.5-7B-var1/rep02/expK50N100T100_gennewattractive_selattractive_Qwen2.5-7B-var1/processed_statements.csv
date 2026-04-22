@@ -569,16 +569,12 @@ Step,ID,Count,InPromptCount,Statement
 75,379,5,4,"'Eat well, be well. Choose healthier options for a happier you!'"
 75,380,1,1,"'Eat well, feel well. Small changes in your diet can make a big difference in your well-being!'"
 75,381,1,2,"'Eat well, be well. Choose foods that nourish your body and soul. #WellBeingWays'"
-75,382,1,1,"'Fuel your body with nature's bounty and witness奇迹绽放！让健康饮食引领你走向幸福之路，每一道选择都是对美好生活的投资。' 
-
-(Note: The first part is in English to keep it under 200"
+75,382,1,1,"'Fuel your body with nature's bounty and witness奇迹绽放！让健康饮食引领你走向幸福之路，每一道选择都是对美好生活的投资。' \n\n(Note: The first part is in English to keep it under 200"
 75,383,1,1,"'Eat well, be well. Small changes in your diet can make a big difference in your life!'"
 75,384,1,2,"'Eat well, be well. Choose nutritious foods for a healthier you!'"
 76,378,28,16,"'Eat well, feel well. Small changes in your diet can create big differences in your life!'"
 76,379,55,20,"'Eat well, be well. Choose healthier options for a happier you!'"
-76,382,1,1,"'Fuel your body with nature's bounty and witness奇迹绽放！让健康饮食引领你走向幸福之路，每一道选择都是对美好生活的投资。' 
-
-(Note: The first part is in English to keep it under 200"
+76,382,1,1,"'Fuel your body with nature's bounty and witness奇迹绽放！让健康饮食引领你走向幸福之路，每一道选择都是对美好生活的投资。' \n\n(Note: The first part is in English to keep it under 200"
 76,384,16,6,"'Eat well, be well. Choose nutritious foods for a healthier you!'"
 76,385,1,3,"'Eat well, be well. Choose foods that nourish your body and soul for a life filled with vitality and joy.'"
 76,386,1,1,"'Eat well, be well. Choose wisely for your health and happiness!'"

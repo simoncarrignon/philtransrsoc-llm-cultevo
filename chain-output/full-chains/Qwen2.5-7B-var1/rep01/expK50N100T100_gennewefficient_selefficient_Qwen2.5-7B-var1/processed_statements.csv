@@ -495,16 +495,12 @@ Step,ID,Count,InPromptCount,Statement
 66,331,5,0,"'A balanced diet promotes well-being and good health.'"
 66,333,78,33,"'Eat well, feel better. A balanced diet equals better health.'"
 66,335,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
-66,336,1,3,"'A balanced diet boosts well-being; choose nutrients over空闲.' 
-
-(65 characters removed for efficiency without affecting meaning)"
+66,336,1,3,"'A balanced diet boosts well-being; choose nutrients over空闲.' \n\n(65 characters removed for efficiency without affecting meaning)"
 66,337,1,1,"'Eating well fuels your body, boosting energy and mood. Start today with balanced meals.'"
 66,338,1,2,"'A balanced diet promotes well-being and good health. Make smart choices!'"
 66,339,1,1,"'Eat wisely for better health.'"
 67,333,45,17,"'Eat well, feel better. A balanced diet equals better health.'"
-67,336,4,1,"'A balanced diet boosts well-being; choose nutrients over空闲.' 
-
-(65 characters removed for efficiency without affecting meaning)"
+67,336,4,1,"'A balanced diet boosts well-being; choose nutrients over空闲.' \n\n(65 characters removed for efficiency without affecting meaning)"
 67,337,36,20,"'Eating well fuels your body, boosting energy and mood. Start today with balanced meals.'"
 67,338,15,7,"'A balanced diet promotes well-being and good health. Make smart choices!'"
 67,340,1,1,"'Eat well, be well. A balanced diet promotes health.'"
@@ -522,31 +518,26 @@ Step,ID,Count,InPromptCount,Statement
 68,349,1,1,"'Eat well, be well. A balanced diet promotes health.'"
 69,348,100,38,"'Eat well, be well. A balanced diet equals balanced life.'"
 69,350,1,2,"'Eat well, feel better. A balanced diet equals better health.'"
-69,351,1,3,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+69,351,1,3,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 69,352,1,2,"'Eat wisely for better health.'"
 69,353,1,4,"'Eat wisely for better health.'"
 69,354,1,1,"'Eat wisely for better health.'"
 70,348,86,37,"'Eat well, be well. A balanced diet equals balanced life.'"
-70,351,14,5,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
-70,355,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+70,351,14,5,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
+70,355,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 70,356,1,2,"'Eat well, be well. A balanced diet equals balanced life.'"
 70,357,1,2,"'Eat well, be well. A balanced diet boosts health.'"
 70,358,1,1,"'Eat well, be well. A balanced diet fosters good health.'"
 70,359,1,2,"'Eat well, feel better. A balanced diet equals better health.'"
 71,348,20,8,"'Eat well, be well. A balanced diet equals balanced life.'"
-71,351,56,23,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+71,351,56,23,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 71,356,24,13,"'Eat well, be well. A balanced diet equals balanced life.'"
 71,360,1,1,"'Eat well, feel better. A balanced diet equals better health.'"
 71,361,1,1,"'Eat well, be well. A balanced diet promotes health.'"
 71,362,1,1,"'Eat wisely for better health.'"
 71,363,1,2,"'Eat well, be well. A balanced diet promotes health.'"
 71,364,1,1,"'Eat well, be well. A balanced diet equals balanced life.'"
-72,351,80,25,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+72,351,80,25,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 72,356,17,15,"'Eat well, be well. A balanced diet equals balanced life.'"
 72,364,3,1,"'Eat well, be well. A balanced diet equals balanced life.'"
 72,365,1,1,"'A balanced diet promotes well-being and good health. Choose wisely.'"
@@ -554,8 +545,7 @@ Step,ID,Count,InPromptCount,Statement
 72,367,1,2,"'Eat well, be well. A balanced diet equals balanced life.'"
 72,368,1,1,"'A healthy diet boosts well-being and reduces illness. Try it!'"
 72,369,1,4,"'A balanced diet keeps you healthy; choose wisely.'"
-73,351,4,3,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+73,351,4,3,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 73,356,94,40,"'Eat well, be well. A balanced diet equals balanced life.'"
 73,368,2,0,"'A healthy diet boosts well-being and reduces illness. Try it!'"
 73,370,1,1,"'Choose a balanced diet for better health and well-being.'"

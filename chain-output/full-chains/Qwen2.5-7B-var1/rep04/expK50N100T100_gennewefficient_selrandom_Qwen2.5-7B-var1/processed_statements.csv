@@ -54,8 +54,7 @@ Step,ID,Count,InPromptCount,Statement
 5,31,1,1,"'A balanced diet improves well-being and health.'"
 5,32,1,1,"A healthy diet boosts well-being and good health. Choose wisely!"
 5,33,1,1,"'A balanced diet promotes well-being and good health.'"
-5,34,1,1,"A healthy diet boosts well-being and good health.ighet
-"
+5,34,1,1,"A healthy diet boosts well-being and good health.ighet\n"
 6,7,81,32,"Innovating in the kitchen by experimenting with international cuisines can introduce a variety of healthy and flavorful ingredients into your diet, making healthy eating a delightful experience."
 6,30,19,11,"A balanced diet boosts well-being; choose nutrients over empty calories."
 6,35,1,2,"'A balanced diet promotes well-being and good health.'"
@@ -308,8 +307,7 @@ Step,ID,Count,InPromptCount,Statement
 42,219,1,1,"'A balanced diet promotes well-being and good health.'"
 43,207,99,42,"'A balanced diet promotes well-being and good health.'"
 43,217,1,1,"'A balanced diet promotes well-being and good health.'"
-43,220,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet
-"
+43,220,1,1,"Eating a balanced, healthy diet improves well-being and overall health.ighet\n"
 43,221,1,1,"A balanced diet boosts well-being; choose nutritious foods for better health."
 43,222,1,1,"A healthy diet boosts well-being and overall health. Try it!"
 43,223,1,2,"'A balanced diet promotes well-being; choose nutritious foods for better health.'"
@@ -377,8 +375,7 @@ Step,ID,Count,InPromptCount,Statement
 52,266,1,1,"'A balanced diet promotes well-being and good health.'"
 52,267,1,2,"A healthy diet improves well-being and overall health."
 52,268,1,2,"A balanced diet boosts well-being and good health; choose wisely."
-52,269,1,1,"A healthy diet boosts well-being and overall health.ighet
-"
+52,269,1,1,"A healthy diet boosts well-being and overall health.ighet\n"
 53,256,38,10,"A healthy diet improves well-being and reduces illness; choose wisely."
 53,258,62,31,"'A balanced diet promotes well-being and good health.'"
 53,270,1,1,"A balanced diet fosters well-being and good health. Choose wisely."
