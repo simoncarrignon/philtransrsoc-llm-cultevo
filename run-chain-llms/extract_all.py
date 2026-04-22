@@ -1,6 +1,7 @@
 import pickle
 import argparse
 import os
+import sys
 import numpy as np
 
 # Setup argument parser
@@ -14,7 +15,15 @@ outdir = args.outdir
 # Load data from pickle files
 all_steps = pickle.load(open(os.path.join(outdir, "alltstepbeta.pkl"), 'rb'))
 all_statements = pickle.load(open(os.path.join(outdir, "variantsbeta.pkl"), "rb"))
-all_prompt = pickle.load(open(os.path.join(outdir, "inpromptbeta.pkl"), "rb"))
+prompt_path = os.path.join(outdir, "inpromptbeta.pkl")
+if os.path.exists(prompt_path):
+    all_prompt = pickle.load(open(prompt_path, "rb"))
+else:
+    print(
+        f"Warning: {prompt_path} not found. InPromptCount will be set to NA.",
+        file=sys.stderr,
+    )
+    all_prompt = []
 
 output_file_path = os.path.join(outdir, "processed_statements.csv")
 
