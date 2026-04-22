@@ -32,7 +32,7 @@ mtext("time",1,2,0.75,outer=T)
 
 pref="gennew"
 # Read the CSV file output of the all chains fr this model
-data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files_0.csv")))
+data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files_1.csv")))
 data  <- data[data$Mutation == mut & data$Selection == sel,]
 
 
