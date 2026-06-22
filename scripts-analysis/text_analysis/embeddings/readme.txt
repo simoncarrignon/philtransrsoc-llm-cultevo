@@ -1,2 +1,2 @@
-pre-calculated embeddings for all chains are avaialbe on zenodo and hould be unzipped here.
+Pre-calculated embeddings for all chains are available on Zenodo and should be unzipped here.
 
