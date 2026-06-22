@@ -9,7 +9,7 @@ This is the repository for the paper "Quantifying the rate and amplitude of cult
 
 ## Version notes
 
-`v1.1.0` is the revised-submission version. Since `v1.0.3`, the repository adds revised figure scripts for the paper, scripts for the Bayesian statistics and unique-word summaries, corrected collapsed-statement CSVs for the semantic embedding analyses, and scripts/placeholders for embeddings stored externally on Zenodo.
+`v1.1.0` is the revised-submission version. This version adds revised figure scripts for the paper, scripts for the Bayesian statistics and unique-word summaries, corrected collapsed-statement CSVs for the semantic embedding analyses, script to generate the new figures and scripts/placeholders for embeddings stored externally on Zenodo.
 
 
 # Project Overview
