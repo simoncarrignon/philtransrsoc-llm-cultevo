@@ -35,7 +35,7 @@ names(modmodels)=c(
   "OpenAI ChatGPT3.5",
   "Qwen3 8B")
 
-png(paste0("Figure_time_select.png"),width=2600,height=1500,pointsize=17)
+png(paste0("Figure7a.png"),width=2600,height=1500,pointsize=17)
 par(mfrow=c(2,3),mar=c(4,4,2,1),cex=1.1,oma=c(0,3,0,7))
 yparam = c("Mean of the cosine distance between unique statements"="MeanDistWithin","Mean of the cosine distance between all statements"="MeanDistWithinWeighted")
 for(ndt in names(yparam)){#,"SDistWithin","MeanDistInit","SDistInit")){

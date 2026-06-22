@@ -3,7 +3,7 @@ sel <- "original"
 model= "Qwen2.5-7B-Instruct"
 pref <- "gennew"
 # Read the CSV file output of the all chains fr this model
-data <- read.csv(here::here("chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files_1.csv")))
+data <- read.csv(here::here("../chain-output","merged-csvs",paste0(model,"_",pref,"_concatenated_files_1.csv")))
 data  <- data[data$Mutation == mut & data$Selection == sel,]
 
 liststat <- data[data$Step < 15 ,]  #statement before 15 steps
@@ -20,7 +20,7 @@ colsid=c("#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","
 names(colsid)=as.character(ids)
 
 
-png("Figure1a.png",height=700,width=900,pointsize=17)
+png("Figure2a.png",height=700,width=900,pointsize=17)
 par(mar=c(4,4,1,1),cex=1.2)
 plot(1,1,ylim=range(data[["Count"]])*1.02,xlim=c(0,15),type="n",ylab="Number of Time Selected",xlab="Step")
 for(u in ids){
